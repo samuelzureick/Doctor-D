@@ -2,12 +2,11 @@
 <html>
 	<head>
 		<title>Login</title>
-		<style type=text/css>
+		<style type='text/css'>
 			#titleHeader {
 				border-style: solid;
 				display: inline-block;
 				text-align: center;
-
 			}
 
 		</style>
@@ -15,7 +14,7 @@
 	<body>
 		<div id='titleHeader'>
 		<h1>TITLE</h1>
-		<div>
+		</div>
 		<p>swag</p>
 
 		<form action="convert.php">
