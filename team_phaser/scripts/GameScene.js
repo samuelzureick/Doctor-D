@@ -6,15 +6,18 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.cursors
         this.cameras.main.setBackgroundColor(0x9900e3)
-        this.load.image('tiles', 'team_phaser/assets/Tilemap/purple.png')
-        this.load.tilemapTiledJSON('map', 'team_phaser/scripts/purpleMapdemo.json')
+        this.load.image('tiles', 'assets/Tilemap/purple.png')
+        this.load.tilemapTiledJSON('map', 'scripts/purpleMapdemo.json')
 
 
-        this.load.atlas("characters", "team_phaser/teamAssets/character.png", "team_phaser/teamAssets/character.json");
-        var frameNames = this.textures.get('characters').getFrameNames();
-        
+        this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
+        var frameNames = this.textures.get('characters').getFrameNames()
+        this.load.atlas('enemy', '/teamAssets/sprites/skeleton.png', '/teamAssets/sprites/skeleton.json')
+
+
         this.player
         this.keys
+        this.enemy
 
     } //end preload
 
@@ -49,15 +52,19 @@ class GameScene extends Phaser.Scene {
         ///////////////////////////////
         //player
         this.player = new Player(this, 200, 120, 'characters')
-        //this.physics.add.collider(this.player, worldLayer)
-        //this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
-        //this.player.body.setCollideWorldBounds(true)
+     //   this.physics.add.collider(this.player, worldLayer)
+        this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
+    //    this.player.body.setCollideWorldBounds(true)
+
+        this.enemy = new Enemy(this, 250, 200, 'enemy')
+        this.physics.add.collider(this.enemy, worldLayer)
 
     } //end create
 
  
     update(time, delta) {
         this.player.update()
+        this.enemy.update()
     } //end update
 
 

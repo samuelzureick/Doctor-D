@@ -44,7 +44,7 @@ class Player extends Entity {
 
     update(time, delta) {
         const {keys} = this //output: this.keys
-        const speed = 100
+        const speed = 64
         const previousVelocity = this.body.velocity.clone()
 
         this.body.setVelocity(0)
