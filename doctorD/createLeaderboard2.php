@@ -1,9 +1,18 @@
 <?php
   require("connection.php");
-  $sql = "";
+  $sql = "CREATE DATABASE leaderboard";
+  $sql = "CREATE TABLE leaderboard (
+          id INT(6) UNSIGNED AUTOINCREMENT PRIMARY KEY,
+          name VARCHAR(15) not null UNIQUE,
+          score INT(7) not null
+          )";
 
-  
- 
+  $sql = "INSERT INTO leaderboard (name, score)
+           VALUES ('Uli', 10000)";
+ $sql = "INSERT INTO leaderboard (name, score)
+           VALUES ('Sani', 1000)";
+  $sql = "INSERT INTO leaderboard (name, score)
+           VALUES ('Zitu', 100)";
 
  mysqli_select_db($conn, "leaderboard");
 
