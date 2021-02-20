@@ -1,6 +1,6 @@
 <?php
   require("connection.php");
-  $sql = "DROP leaderboard IF EXISTS";
+  $sql = "DROP table IF EXISTS leaderboard";
   $sql = "CREATE DATABASE leaderboard";
   $sql = "CREATE TABLE leaderboard (
           id INT(6) UNSIGNED AUTOINCREMENT PRIMARY KEY,
