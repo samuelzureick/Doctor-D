@@ -6,11 +6,11 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.cursors
         this.cameras.main.setBackgroundColor(0x9900e3)
-        this.load.image('tiles', '../assets/Tilemap/purple.png')
-        this.load.tilemapTiledJSON('map', '../scripts/purpleMapdemo.json')
+        this.load.image('tiles', '/assets/Tilemap/purple.png')
+        this.load.tilemapTiledJSON('map', '/scripts/purpleMapdemo.json')
 
 
-        this.load.atlas("characters", "../teamAssets/character.png", "../teamAssets/character.json");
+        this.load.atlas("characters", "/teamAssets/character.png", "/teamAssets/character.json");
         var frameNames = this.textures.get('characters').getFrameNames();
         
         this.player
