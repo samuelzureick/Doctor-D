@@ -18,6 +18,7 @@ class GameScene extends Phaser.Scene {
         this.player
         this.keys
         this.enemy
+        this.enemies
         this.projectiles
         this.keys
         this.lastFiredTime = 0
@@ -58,17 +59,24 @@ class GameScene extends Phaser.Scene {
      //   this.physics.add.collider(this.player, worldLayer)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
     //    this.player.body.setCollideWorldBounds(true)
-
-        this.enemy = new Enemy(this, 250, 200, 'enemy')
-        this.physics.add.collider(this.enemy, worldLayer)
+        this.enemies = this.add.group()
+        for (let i = 0; i < 5; i++) {
+            const e = new Enemy(this, 220 + 20*i, 250, 'enemy')
+            e.body.setCollideWorldBounds(true)
+            e.setTint(0x9999ff)
+            this.enemies.add(e)
+        }
+        this.physics.add.collider(this.enemies, worldLayer)
 
 
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE'
         })
         this.projectiles = new Projectiles(this)
+        
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
-        this.physics.add.overlap(this.projectiles, this.enemy, this.handleProjectileEnemyCollision, null, this)
+        this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
+        this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
     } //end create
 
     handleProjectileWorldCollision(p) {
@@ -90,6 +98,21 @@ class GameScene extends Phaser.Scene {
             })
         }
     }
+
+    handlePlayerEnemyCollision(player, enemy) {
+        this.cameras.main.shake(10, 0.02)
+        player.setTint(0xff0000)
+        this.time.addEvent({
+            delay: 500,
+            callback: () => {
+                player.clearTint()
+            },
+            callbackScope: this,
+            loop: false
+        })
+        enemy.explode()
+
+    }
  
     update(time, delta) {
         if(this.keys.space.isDown){
@@ -98,8 +121,13 @@ class GameScene extends Phaser.Scene {
                 this.projectiles.fireProjectile(this.player.x, this.player.y, this.player.facing)
             }
         }
+
         this.player.update()
-        this.enemy.update()
+        this.enemies.children.iterate((child) => {
+            if(!child.isDead) {
+                child.update()
+            }
+        })
     } //end update
 
 

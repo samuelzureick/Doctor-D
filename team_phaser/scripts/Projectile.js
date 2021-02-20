@@ -6,8 +6,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     }
 
     fire(x, y, dir) {
-        console.log("firing")
-        console.log(dir)
         this.body.reset(x, y)
         this.setActive(true)
         this.setVisible(true)
