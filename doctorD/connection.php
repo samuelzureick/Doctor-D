@@ -2,7 +2,7 @@
 	$host = "dbhost.cs.man.ac.uk";
 	$un = "x83005sz"; 
 	$pw = "x14databasepass";
-	//$DB = "leaderboard";
+	$DB = "x83005sz";
 	//$database = "leaderboard";
 
 	$conn = mysqli_connect($host, $un, $pw);

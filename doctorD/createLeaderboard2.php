@@ -1,19 +1,9 @@
 <?php
   require("connection.php");
-  $sql = "DROP table IF EXISTS leaderboard";
-  $conn->query($sql);
-  $sql = "CREATE DATABASE leaderboard";
-  $conn->query($sql);
-  $sql = "CREATE TABLE leaderboard (
-          id INT(6) UNSIGNED AUTOINCREMENT PRIMARY KEY,
-          name VARCHAR(15) not null UNIQUE,
-          score INT(7) not null
-          )";
-          $conn->query($sql);
 
   
 
- mysqli_select_db($conn, "leaderboard");
+ mysqli_select_db($conn, "x83005sz");
 
   $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Uli', 10000)";
@@ -61,7 +51,7 @@ $main = "
     </div>
   </div>";
   $count = 1;
-  while ($row = $records ->fetch_assoc())
+  while ($row = $records->fetch_assoc())
   {
   $main .= "<div class='tableRow'>
   	<div class='cell'>
