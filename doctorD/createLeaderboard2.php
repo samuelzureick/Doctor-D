@@ -11,6 +11,10 @@
           )";
           $conn->query($sql);
 
+  
+
+ mysqli_select_db($conn, "leaderboard");
+
   $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Uli', 10000)";
            $conn->query($sql);
@@ -21,10 +25,6 @@
            VALUES ('Zitu', 100)";
 
  $conn->query($sql);
-
- mysqli_select_db($conn, "leaderboard");
-
-  
 
   $sql = "SELECT * FROM leaderboard";
   $records = $conn->query($sql);
