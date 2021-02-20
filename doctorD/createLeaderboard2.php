@@ -1,21 +1,26 @@
 <?php
   require("connection.php");
   $sql = "DROP table IF EXISTS leaderboard";
+  $conn->query($sql);
   $sql = "CREATE DATABASE leaderboard";
+  $conn->query($sql);
   $sql = "CREATE TABLE leaderboard (
           id INT(6) UNSIGNED AUTOINCREMENT PRIMARY KEY,
           name VARCHAR(15) not null UNIQUE,
           score INT(7) not null
           )";
+          $conn->query($sql);
 
   $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Uli', 10000)";
+           $conn->query($sql);
  $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Sani', 1000)";
+           $conn->query($sql);
   $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Zitu', 100)";
 
- $result = $conn->query($sql) or die($conn->error);
+ $conn->query($sql);
 
  mysqli_select_db($conn, "leaderboard");
 
