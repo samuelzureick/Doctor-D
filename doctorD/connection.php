@@ -1,11 +1,11 @@
 <?php
-	$host = "localhost";
-	$un = "root"; 
-	$pw = "root";
-	$DB = "leaderboard";
+	$host = "dbhost.cs.man.ac.uk";
+	$un = "x83005sz"; 
+	$pw = "x14databasepass";
+	//$DB = "leaderboard";
 	//$database = "leaderboard";
 
-	$conn = mysqli_connect($host, $un, $pw, $DB);
+	$conn = mysqli_connect($host, $un, $pw);
 
 	if(!$conn)
 	{
