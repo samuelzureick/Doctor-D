@@ -1,5 +1,6 @@
 <?php
   require("connection.php");
+  $sql = "DROP leaderboard IF EXISTS";
   $sql = "CREATE DATABASE leaderboard";
   $sql = "CREATE TABLE leaderboard (
           id INT(6) UNSIGNED AUTOINCREMENT PRIMARY KEY,
@@ -13,6 +14,8 @@
            VALUES ('Sani', 1000)";
   $sql = "INSERT INTO leaderboard (name, score)
            VALUES ('Zitu', 100)";
+
+ $result = $conn->query($sql) or die($conn->error);
 
  mysqli_select_db($conn, "leaderboard");
 
