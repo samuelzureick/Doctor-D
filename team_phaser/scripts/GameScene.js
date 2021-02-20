@@ -60,10 +60,10 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
     //    this.player.body.setCollideWorldBounds(true)
         this.enemies = this.add.group()
-        for (let i = 0; i < 5; i++) {
+        this.enemies.maxSize = 5
+        for (let i = 0; i < this.enemies.maxSize; i++) {
             const e = new Enemy(this, 220 + 20*i, 250, 'enemy')
             e.body.setCollideWorldBounds(true)
-            e.setTint(0x9999ff)
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
@@ -100,7 +100,7 @@ class GameScene extends Phaser.Scene {
     }
 
     handlePlayerEnemyCollision(player, enemy) {
-        this.cameras.main.shake(10, 0.02)
+        this.cameras.main.shake(20, 0.02)
         player.setTint(0xff0000)
         this.time.addEvent({
             delay: 500,
@@ -126,6 +126,11 @@ class GameScene extends Phaser.Scene {
         this.enemies.children.iterate((child) => {
             if(!child.isDead) {
                 child.update()
+                if (!this.enemies.isFull()){
+                    const e = new Enemy(this, 220, 250, 'enemy')
+                    e.body.setCollideWorldBounds(true)
+                    this.enemies.add(e)
+                }
             }
         })
     } //end update
