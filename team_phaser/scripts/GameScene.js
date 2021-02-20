@@ -6,18 +6,21 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.cursors
         this.cameras.main.setBackgroundColor(0x9900e3)
+        this.load.image('bullet', 'teamAssets/sprites/bullet.png')
         this.load.image('tiles', 'assets/Tilemap/purple.png')
         this.load.tilemapTiledJSON('map', 'scripts/purpleMapdemo.json')
 
-
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         var frameNames = this.textures.get('characters').getFrameNames()
-        this.load.atlas('enemy', '/teamAssets/sprites/skeleton.png', '/teamAssets/sprites/skeleton.json')
-
+        this.load.image('bullet', 'assets/bullet.png')
+        this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
 
         this.player
         this.keys
         this.enemy
+        this.projectiles
+        this.keys
+        this.lastFiredTime = 0
 
     } //end preload
 
@@ -59,10 +62,42 @@ class GameScene extends Phaser.Scene {
         this.enemy = new Enemy(this, 250, 200, 'enemy')
         this.physics.add.collider(this.enemy, worldLayer)
 
+
+        this.keys = this.input.keyboard.addKeys({
+            space: 'SPACE'
+        })
+        this.projectiles = new Projectiles(this)
+        this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
+        this.physics.add.overlap(this.projectiles, this.enemy, this.handleProjectileEnemyCollision, null, this)
     } //end create
 
+    handleProjectileWorldCollision(p) {
+        p.recycle()
+        this.projectiles.killAndHide(p)
+    }
+
+    handleProjectileEnemyCollision(enemy, projectile) {
+        if (projectile.active) {
+            enemy.setTint(0xff0000)
+            this.time.addEvent({
+                delay: 30,
+                callback: () => {
+                    enemy.explode()
+                    projectile.recycle()
+                },
+                callbackScope: this,
+                loop: false
+            })
+        }
+    }
  
     update(time, delta) {
+        if(this.keys.space.isDown){
+            if (time > this.lastFiredTime) {
+                this.lastFiredTime = time + 500
+                this.projectiles.fireProjectile(this.player.x, this.player.y, this.player.facing)
+            }
+        }
         this.player.update()
         this.enemy.update()
     } //end update

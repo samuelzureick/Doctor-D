@@ -4,7 +4,8 @@ class Player extends Entity {
 
         const animFrameRate = 8
         const anims = scene.anims
-        var direction = true;
+        var reflectImage = true
+        this.facing = 'down'
 
         anims.create({
             key: 'move',
@@ -44,7 +45,7 @@ class Player extends Entity {
 
     update(time, delta) {
         const {keys} = this //output: this.keys
-        const speed = 64
+        const speed = 80
         const previousVelocity = this.body.velocity.clone()
 
         this.body.setVelocity(0)
@@ -65,19 +66,23 @@ class Player extends Entity {
 
         //animations
         if (keys.up.isDown || keys.w.isDown) {
-            this.flipX = this.direction
+            this.flipX = this.reflectImage
             this.anims.play('move', true)
+            this.facing = "up"
         } else if (keys.down.isDown || keys.s.isDown) {
-            this.flipX = this.direction
+            this.flipX = this.reflectImage
             this.anims.play('move', true)
+            this.facing = "down"
         } else if (keys.left.isDown || keys.a.isDown) {
-            this.direction = true
-            this.flipX = this.direction
+            this.reflectImage = true
+            this.flipX = this.reflectImage
             this.anims.play('move', true)
+            this.facing = "left"
         } else if (keys.right.isDown || keys.d.isDown) {
-            this.direction = false
-            this.flipX = this.direction
+            this.reflectImage = false
+            this.flipX = this.reflectImage
             this.anims.play('move', true)
+            this.facing = "right"
         } else {
             this.anims.stop()
         }
