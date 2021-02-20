@@ -1,0 +1,554 @@
+body{
+  background-image: url('BACKGROUND.png');
+  background-repeat:no-repeat;
+}
+
+html{
+  height: 100%;
+  width:100%;
+}
+
+button {
+        outline: none;
+        border:none;
+        cursor: pointer;  
+      }
+
+
+.bounceTitle {
+      position:fixed;
+      left:8%;
+      top:60px;
+      height:300px;
+      width:1300px;
+      background-image: url("DOCTOR_D.png");
+      background-repeat: no-repeat;
+      -webkit-animation:bounceTitle 1s infinite;
+      z-index: 1;
+    }
+    
+    @-webkit-keyframes bounceTitle {
+      0%       { top:65px; }
+      10%      { top:70px; }
+      20%      { top:75px; }
+      30%    { top:80px; }
+      40%      { top:85px; }
+      50%      { top:90px; }
+      60%      { top:85px; }
+      70%      { top:80px; }
+      80%    { top:75px; }
+      90%    { top:70px; }
+      100%     { top:65px; }
+    }
+
+
+.cloud {
+      position:fixed;
+      top:180px;
+      height:128px;
+      width:200px;
+      background-image: url("cloud.png");
+      background-repeat: no-repeat;
+      -webkit-animation:movecloud 15s linear infinite;
+      z-index: 0;
+    }
+    
+  @-webkit-keyframes movecloud {
+    0% {margin-left: 100%;}
+    100% {margin-left: -300px;}
+  }
+
+.cloud1 {
+      position:fixed;
+      top:100px;
+      height:80px;
+      width:200px;
+      background-image: url("cloud1.png");
+      background-repeat: no-repeat;
+      -webkit-animation:movecloudOne 10s linear infinite;
+      z-index: 0;
+    }
+    
+  @-webkit-keyframes movecloudOne {
+    0% {margin-left: -300px;}
+    100% {margin-left: 100%;}
+  }
+
+.cloud2 {
+      position:fixed;
+      top:10px;
+      height:200px;
+      width:200px;
+      background-image: url("cloud2.png");
+      background-repeat: no-repeat;
+      -webkit-animation:movecloudTwo 20s linear infinite;
+      z-index: 0;
+    }
+    
+  @-webkit-keyframes movecloudTwo {
+    0% {margin-left: 100%;}
+    100% {margin-left: -300px;}
+  }
+
+div.titleSpace{
+  margin: auto;
+  margin-top: 5%;
+  margin-bottom: 7%;
+  margin-left:120px;
+  width: 1200px;
+  height: 200px;
+}
+
+input[type=text], select {
+  padding: 7px;
+  display: inline-block;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+div.username{
+  margin: auto;
+  width: 585px; 
+  height: 50px;
+  margin-bottom: 1%;
+  background-color: #1c2627;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+div.usernamePic{
+  float: left;
+  background-image: url("USERNAME.png");
+  background-repeat: no-repeat;
+  margin-left: 20px;
+  margin-top: 3px;
+  width: 297px;
+  height: 40px;
+  margin-right: 50px;
+  background-size: 247.5px, 33.3px;
+}
+
+div.usernameForm{
+  padding: 5px;
+  float: left;
+  width: 180px;
+  height: 20px;
+}
+
+div.password{
+  margin: auto;
+  width: 38.5%;
+  height: 50px;
+  margin-bottom: 1%;
+  background-color: #1c2627;
+  padding-top: 12px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+div.passwordPic{
+  float: left;
+  background-image: url("PASSWORD.png");
+  background-repeat: no-repeat;
+  margin-left: 20px;
+  width: 297px;
+  height: 40px;
+  margin-right: 50px;
+  background-size: 247.5px, 33.3px;
+}
+
+div.passwordForm{
+  padding: 5px;
+  padding-top: 2px;
+  float: left;
+  width: 180px;
+  height: 20px;
+}
+
+div.logIn{
+  text-align: center;
+  margin: auto;
+  margin-bottom: 1%;
+  padding-top: 10px;
+  width: 39.2%;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.LogInButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("LOG_IN.png");
+  background-repeat: no-repeat;
+  background-size: 148px 32px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+div.accAndGuestParent{
+  margin: auto;
+  margin-bottom: 1%;
+  width: 39%;
+  height: 80px;
+  border: 5px solid #1c2627;
+  background-color: #1c2627;  
+}
+
+div.createAccParent, div.guestPlayParent{
+  float: left;
+  margin:auto;
+  background-color: #1c2627;  
+  width: 50%;
+  height: 85px;
+  background-position: center;
+  text-align: center;
+  padding-top: 15px;
+  background-image: url("border1.png");
+  background-repeat: no-repeat;
+}
+
+
+button.createAccountButton{
+  width: 70%;
+  height: 70px;
+  background-image: url("CREATE_ACCOUNT.png");
+  background-repeat: no-repeat;
+  background-size: 212.5px 71.6px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+button.guestPlayButton{
+  width: 70%;
+  height: 70px;
+  background-image: url("PLAY_AS_GUEST.png");
+  background-repeat: no-repeat;
+  background-size: 212.5px 71.6px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+
+div.play{
+  text-align: center;
+  margin: auto;
+  margin-bottom: 1%;
+  padding-top: 10px;
+  width: 39.2%;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.playButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("PLAY.png");
+  background-repeat: no-repeat;
+  background-size: 111.6px 35px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+div.leaderboard{
+  text-align: center;
+  margin: auto;
+  margin-bottom: 1%;
+  padding-top: 10px;
+  width: 39.2%;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.leaderboardButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("LEADERBOARD.png");
+  background-repeat: no-repeat;
+  background-size: 319.6px 35px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+div.controls{
+  text-align: center;
+  margin: auto;
+  margin-bottom: 1%;
+  padding-top: 10px;
+  width: 39.2%;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.controlsButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("CONTROLS.png");
+  background-repeat: no-repeat;
+  background-size: 240px 35px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+
+div.createAccFillerSpace{
+  margin: auto;
+  margin-top: 5%;
+  margin-bottom: 7%;
+  margin-left:120px;
+  width: 1200px;
+  height: 150px;
+}
+
+div.confirmPassword{
+  margin: auto;
+  width: 38.5%;
+  height: 90px;
+  margin-bottom: 1%;
+  background-color: #1c2627;
+  padding-top: 12px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border2.png");
+  background-repeat: no-repeat;
+}
+
+div.confirmPasswordPic{
+  float: left;
+  background-image: url("CONFIRM_PASSWORD.png");
+  background-repeat: no-repeat;
+  margin-left: 20px;
+  width: 297px;
+  height: 70px;
+  margin-right: 50px;
+  background-size: 230.5px 71.6px;
+}
+
+div.confirmPasswordForm{
+  padding: 5px;
+  padding-top: 20px;
+  float: left;
+  width: 180px;
+  height: 20px;
+}
+
+.bounceCreateAccount {
+      position:fixed;
+      left:8%;
+      top:90px;
+      height:138px;
+      width:1300px;
+      background-image: url("TITLE_CREATE_ACCOUNT.png");
+      background-repeat: no-repeat;
+      -webkit-animation:bounceCreateAccount 1s infinite;
+      z-index: 1;
+    }
+    
+    @-webkit-keyframes bounceCreateAccount {
+      0%       { top:95px; }
+      10%      { top:100px; }
+      20%      { top:105px; }
+      30%    { top:110px; }
+      40%      { top:115px; }
+      50%      { top:120px; }
+      60%      { top:115px; }
+      70%      { top:110px; }
+      80%    { top:105px; }
+      90%    { top:100px; }
+      100%     { top:95px; }
+    }
+
+
+div.confirmAndCancel{
+  margin: auto;
+  margin-bottom: 1%;
+  width: 39%;
+  height: 80px;
+  border: 5px solid #1c2627;
+  background-color: #1c2627;  
+}
+
+div.confirmParent, div.cancelParent{
+  float: left;
+  margin:auto;
+  background-color: #1c2627;  
+  width: 50%;
+  height: 85px;
+  background-position: center;
+  text-align: center;
+  padding-top: 15px;
+  background-image: url("border1.png");
+  background-repeat: no-repeat;
+}
+
+
+button.confirmButton{
+  width: 70%;
+  height: 70px;
+  background-image: url("CONFIRM.png");
+  background-repeat: no-repeat;
+  background-size: 222.5px 71.6px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+button.cancelButton{
+  width: 70%;
+  height: 70px;
+  background-image: url("CANCEL.png");
+  background-repeat: no-repeat;
+  background-size: 180.5px 65.6px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+
+.bounceLeaderboard {
+      position:fixed;
+      left:10%;
+      top:90px;
+      height:138px;
+      width:1300px;
+      background-image: url("TITLE_LEADERBOARD.png");
+      background-repeat: no-repeat;
+      -webkit-animation:bounceLeaderboard 1s infinite;
+      z-index: 1;
+    }
+    
+    @-webkit-keyframes bounceLeaderboard {
+      0%       { top:95px; }
+      10%      { top:100px; }
+      20%      { top:105px; }
+      30%    { top:110px; }
+      40%      { top:115px; }
+      50%      { top:120px; }
+      60%      { top:115px; }
+      70%      { top:110px; }
+      80%    { top:105px; }
+      90%    { top:100px; }
+      100%     { top:95px; }
+    }
+
+div.NumberANDnameANDscore{
+  margin: auto;
+  width: 59%;
+  height: 100px;
+  background-color: #1c2627;
+  margin-bottom: 1px; 
+}
+
+div.number, div.name, div.score{
+  float: left;
+  background-color: #1c2627;  
+  width: 33.3%;
+  height: 85px;
+  padding-top: 15px;
+  background-image: url("border1.png");
+  background-repeat: no-repeat;
+}
+
+div.numberPic{
+  width: 70%;
+  height: 70%;
+  background-image: url("NUMBER.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto;
+}
+
+div.namePic{
+  width: 70%;
+  height: 70%;
+  background-image: url("NAME.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto;
+}
+div.scorePic{
+  width: 70%;
+  height: 70%;
+  background-image: url("SCORE.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto;
+}
+
+div.tableRow{
+  margin: auto;
+  width: 59%;
+  height: 100px;
+  background-color: #1c2627;  
+}
+div.cell{
+  float: left;
+  background-color: #1c2627;  
+  width: 33.3%;
+  height: 85px;
+  padding-top: 15px;
+  background-image: url("border1.png");
+  background-repeat: no-repeat;
+  margin: auto;
+}
+
+div.1, div.2, div.3{
+  width: 70%;
+  height: 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto;
+}
+div.row1{
+  background-image: url("FIRST.png");
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+  margin: auto;
+  background-position:center;
+}
+div.row2{
+  background-image: url("SECOND.png");
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+  margin: auto;
+  background-position:center;
+}
+div.row3{
+  background-image: url("THIRD.png");
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+  margin: auto;
+  background-position:center;
+}
+
+div.textbox{
+  width: 70%;
+  height: 30%;
+  padding-top: 15px;
+  background-repeat: no-repeat;
+  font-size: 30px;
+  color: white;
+  background-position: center;
+  margin: auto;
+  text-align: center;
+}
+
+    
