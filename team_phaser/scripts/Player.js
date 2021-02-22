@@ -5,7 +5,7 @@ class Player extends Entity {
         const animFrameRate = 8
         const anims = scene.anims
         var reflectImage = true
-        this.facing = 'down'
+        this.facing = 'right'
 
         anims.create({
             key: 'move',
@@ -68,11 +68,9 @@ class Player extends Entity {
         if (keys.up.isDown || keys.w.isDown) {
             this.flipX = this.reflectImage
             this.anims.play('move', true)
-            this.facing = "up"
         } else if (keys.down.isDown || keys.s.isDown) {
             this.flipX = this.reflectImage
             this.anims.play('move', true)
-            this.facing = "down"
         } else if (keys.left.isDown || keys.a.isDown) {
             this.reflectImage = true
             this.flipX = this.reflectImage

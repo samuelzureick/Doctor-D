@@ -20,14 +20,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
                 this.setVelocity(200, 0)
                 this.body.rotation = 0
                 break
-            case 'up':
-                this.setVelocity(0, -200)
-                this.body.rotation = -90
-                break
-            case 'down':
-                this.setVelocity(0, 200)
-                this.body.rotation = 90
-                break
         }
     }
 

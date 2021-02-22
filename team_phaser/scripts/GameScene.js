@@ -100,7 +100,7 @@ class GameScene extends Phaser.Scene {
     }
 
     handlePlayerEnemyCollision(player, enemy) {
-        this.cameras.main.shake(20, 0.02)
+        this.cameras.main.shake(15, 0.02) // increase to 20 once hitboxes are fixed.
         player.setTint(0xff0000)
         this.time.addEvent({
             delay: 500,
