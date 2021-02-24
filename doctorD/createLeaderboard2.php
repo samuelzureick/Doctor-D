@@ -31,8 +31,9 @@ $main = "
   <link rel='stylesheet' type='text/css' href='webSiteStyleSheet.css'>
 </head>
 <body>
-  <div class='createAccFillerSpace'></div>
-  <div class='bounceLeaderboard'></div>
+  <div class='createLeaderboardFillerSpace'>
+      <div class='bounceLeaderboard'></div>
+  </div>
 
   <div class='cloud'></div>
   <div class='cloud1'></div>
