@@ -5,16 +5,6 @@
 
  mysqli_select_db($conn, "x83005sz");
 
-  $sql = "INSERT INTO leaderboard (name, score)
-           VALUES ('Uli', 10000)";
-           $conn->query($sql);
- $sql = "INSERT INTO leaderboard (name, score)
-           VALUES ('Sani', 1000)";
-           $conn->query($sql);
-  $sql = "INSERT INTO leaderboard (name, score)
-           VALUES ('Zitu', 100)";
-
- $conn->query($sql);
 
   $sql = "SELECT * FROM leaderboard";
   $records = $conn->query($sql);
