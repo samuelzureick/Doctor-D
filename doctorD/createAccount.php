@@ -8,8 +8,10 @@ $main = "<!DOCTYPE html>
   <link rel='stylesheet' type='text/css' href='webSiteStyleSheet.css'>
 </head>
 <body>
-  <div class='createAccFillerSpace'></div>
-  <div class='bounceCreateAccount'></div>
+  <div class='createAccFillerSpace'>
+      <div class='bounceCreateAccount'></div>
+  </div>
+
 
   <div class='cloud'></div>
   <div class='cloud1'></div>

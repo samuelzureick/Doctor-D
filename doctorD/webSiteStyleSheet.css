@@ -1,11 +1,9 @@
-body{
-  background-image: url('BACKGROUND.png');
-  background-repeat:no-repeat;
-}
-
 html{
-  height: 100%;
-  width:100%;
+  background: url("BACKGROUND.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 button {
@@ -16,35 +14,37 @@ button {
 
 
 .bounceTitle {
-      position:fixed;
-      left:8%;
-      top:60px;
-      height:300px;
-      width:1300px;
+      position:relative;
+      margin: auto;
+/*      margin-left: 20%;*/
+/*      padding-left: 22%;*/
+      height:100%;
+      width:100%;
       background-image: url("DOCTOR_D.png");
+/*      background-color: red;*/
       background-repeat: no-repeat;
       -webkit-animation:bounceTitle 1s infinite;
       z-index: 1;
     }
     
     @-webkit-keyframes bounceTitle {
-      0%       { top:65px; }
-      10%      { top:70px; }
-      20%      { top:75px; }
-      30%    { top:80px; }
-      40%      { top:85px; }
-      50%      { top:90px; }
-      60%      { top:85px; }
-      70%      { top:80px; }
-      80%    { top:75px; }
-      90%    { top:70px; }
-      100%     { top:65px; }
+      0%       { top: -1%; }
+      10%      { top: -4%; }
+      20%      { top: -7%; }
+      30%      { top: -10%; }
+      40%      { top: -13%; }
+      50%      { top: -16%; }
+      60%      { top: -13%; }
+      70%      { top: -10%; }
+      80%      { top: -7%; }
+      90%      { top: -4%; }
+      100%     { top: -1%; }
     }
 
 
 .cloud {
       position:fixed;
-      top:180px;
+      top:150px;
       height:128px;
       width:200px;
       background-image: url("cloud.png");
@@ -90,12 +90,17 @@ button {
     100% {margin-left: -300px;}
   }
 
+
+
+/* ##### LOG-IN PAGE ##### */
+
+
+
 div.titleSpace{
-  margin: auto;
-  margin-top: 5%;
-  margin-bottom: 7%;
-  margin-left:120px;
-  width: 1200px;
+  margin: 0 auto;
+  margin-top: 6%;
+  margin-bottom: 4%;
+  width: 880px;
   height: 200px;
 }
 
@@ -141,7 +146,7 @@ div.usernameForm{
 
 div.password{
   margin: auto;
-  width: 38.5%;
+  width: 585px; 
   height: 50px;
   margin-bottom: 1%;
   background-color: #1c2627;
@@ -174,9 +179,10 @@ div.passwordForm{
 div.logIn{
   text-align: center;
   margin: auto;
-  margin-bottom: 1%;
+  margin-bottom: 1.5%;
   padding-top: 10px;
-  width: 39.2%;
+  padding-left: 10px;
+  width: 585px; 
   height: 50px;
   background-color: #1c2627;  
   background-image: url("border.png");
@@ -194,12 +200,33 @@ button.LogInButton{
   background-color: #1c2627;  
 }
 
-div.accAndGuestParent{
+div.logOut{
+  text-align: center;
   margin: auto;
   margin-bottom: 1%;
-  width: 39%;
+  padding-top: 10px;
+  width: 595px;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.LogOutButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("LOG_OUT.png");
+  background-repeat: no-repeat;
+  background-size: 180px 32px;
+  background-position: center;
+  background-color: #1c2627;  
+}
+
+div.accAndGuestParent{
+  margin: auto;
+  width: 595px; 
   height: 80px;
-  border: 5px solid #1c2627;
   background-color: #1c2627;  
 }
 
@@ -207,9 +234,10 @@ div.createAccParent, div.guestPlayParent{
   float: left;
   margin:auto;
   background-color: #1c2627;  
-  width: 50%;
+  width: 292px;
   height: 85px;
   background-position: center;
+  padding-left: 5px;
   text-align: center;
   padding-top: 15px;
   background-image: url("border1.png");
@@ -238,12 +266,15 @@ button.guestPlayButton{
 }
 
 
+/* ##### MENU PAGE ##### */
+
+
 div.play{
   text-align: center;
   margin: auto;
   margin-bottom: 1%;
   padding-top: 10px;
-  width: 39.2%;
+  width: 595px;
   height: 50px;
   background-color: #1c2627;  
   background-image: url("border.png");
@@ -266,7 +297,7 @@ div.leaderboard{
   margin: auto;
   margin-bottom: 1%;
   padding-top: 10px;
-  width: 39.2%;
+  width: 595px;
   height: 50px;
   background-color: #1c2627;  
   background-image: url("border.png");
@@ -289,7 +320,7 @@ div.controls{
   margin: auto;
   margin-bottom: 1%;
   padding-top: 10px;
-  width: 39.2%;
+  width: 595px;
   height: 50px;
   background-color: #1c2627;  
   background-image: url("border.png");
@@ -308,18 +339,21 @@ button.controlsButton{
 }
 
 
+
+/* ##### CREATE ACCOUNT PAGE ##### */
+
 div.createAccFillerSpace{
   margin: auto;
-  margin-top: 5%;
-  margin-bottom: 7%;
-  margin-left:120px;
-  width: 1200px;
+  margin-top: 1%;
+  margin-bottom: 11.5%;
+  width: 897px;
   height: 150px;
 }
 
+
 div.confirmPassword{
   margin: auto;
-  width: 38.5%;
+  width: 585px; 
   height: 90px;
   margin-bottom: 1%;
   background-color: #1c2627;
@@ -350,11 +384,9 @@ div.confirmPasswordForm{
 }
 
 .bounceCreateAccount {
-      position:fixed;
-      left:8%;
-      top:90px;
-      height:138px;
-      width:1300px;
+      position:relative;
+      height:100%;
+      width:100%;
       background-image: url("TITLE_CREATE_ACCOUNT.png");
       background-repeat: no-repeat;
       -webkit-animation:bounceCreateAccount 1s infinite;
@@ -378,10 +410,9 @@ div.confirmPasswordForm{
 
 div.confirmAndCancel{
   margin: auto;
-  margin-bottom: 1%;
-  width: 39%;
+  margin-bottom: 4%;
+  width: 595px;
   height: 80px;
-  border: 5px solid #1c2627;
   background-color: #1c2627;  
 }
 
@@ -418,6 +449,9 @@ button.cancelButton{
   background-position: center;
   background-color: #1c2627;  
 }
+
+
+/* ##### LEADERBOARD PAGE ##### */
 
 
 .bounceLeaderboard {
@@ -504,39 +538,23 @@ div.cell{
   padding-top: 15px;
   background-image: url("border1.png");
   background-repeat: no-repeat;
-  margin: auto;
 }
 
-div.1, div.2, div.3{
+div.first, div.second, div.third{
   width: 70%;
   height: 70%;
   background-repeat: no-repeat;
   background-position: center;
   margin: auto;
 }
-div.row1{
+div.first{
   background-image: url("FIRST.png");
-  background-repeat: no-repeat;
-  height: 100%;
-  width:100%;
-  margin: auto;
-  background-position:center;
 }
-div.row2{
+div.second{
   background-image: url("SECOND.png");
-  background-repeat: no-repeat;
-  height: 100%;
-  width:100%;
-  margin: auto;
-  background-position:center;
 }
-div.row3{
+div.third{
   background-image: url("THIRD.png");
-  background-repeat: no-repeat;
-  height: 100%;
-  width:100%;
-  margin: auto;
-  background-position:center;
 }
 
 div.textbox{
@@ -551,4 +569,171 @@ div.textbox{
   text-align: center;
 }
 
+
+/* ##### CONTROLS PAGE ##### */
+
+div.createControlsSpace{
+  margin: auto;
+  margin-top: 1%;
+  margin-bottom: 8.5%;
+  width: 1012px;
+  height: 150px;
+}
+
+div.bounceChangeControls{
+      position:relative;
+      height:100%;
+      width:100%;
+      background-image: url("TITLE_CHANGE_CONTROLS.png");
+      background-repeat: no-repeat;
+      -webkit-animation:bounceChangeControls 1s infinite;
+      z-index: 1;
+    }
     
+    @-webkit-keyframes bounceChangeControls {
+      0%       { top:95px; }
+      10%      { top:100px; }
+      20%      { top:105px; }
+      30%    { top:110px; }
+      40%      { top:115px; }
+      50%      { top:120px; }
+      60%      { top:115px; }
+      70%      { top:110px; }
+      80%    { top:105px; }
+      90%    { top:100px; }
+      100%     { top:95px; }
+    }
+
+
+div.fillerChangeControls{
+  margin: auto;
+  width: 90%;
+  height: 30px;
+  margin-bottom: 0.1%;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow: auto;
+}
+
+div.movement{
+  margin: auto;
+  width: 585px; 
+  height: 50px;
+  margin-bottom: 0.5%;
+  background-color: #1c2627;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+div.attack{
+  margin: auto;
+  width: 585px; 
+  height: 50px;
+  margin-top: 1.5%;
+  margin-bottom: 0.5%;
+  background-color: #1c2627;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+
+div.movementPic, div.attackPic{
+  float: left;
+  margin-left: 20px;
+  margin-top: 3px;
+  width: 297px;
+  height: 40px;
+  margin-right: 50px;
+  
+}
+
+div.movementPic{
+  background-image: url("MOVEMENT.png");
+  background-repeat: no-repeat;
+  background-size: 247.5px, 33.3px;
+}
+
+div.attackPic{
+  background-image: url("ATTACK.png");
+  background-repeat: no-repeat;
+  background-size: 180px, 36px;
+}
+
+div.movementForm, div.attackForm{
+  padding: 5px;
+  float: left;
+  width: 180px;
+  height: 20px;
+}
+
+div.confirmAndCancelSmall{
+  margin: auto;
+  margin-bottom: 3%;
+  width: 595px;
+  height: 40px;
+  background-color: #1c2627;  
+}
+
+div.confirmParentSmall, div.cancelParentSmall{
+  float: left;
+  margin:auto;
+  background-color: #1c2627;  
+  width: 50%;
+  height: 55px;
+  padding-top: 5px;
+  background-position: center;
+  text-align: center;
+
+  background-image: url("border3.png");
+  background-repeat: no-repeat;
+}
+
+
+button.confirmButtonSmall{
+  width: 70%;
+  height: 50px;
+  background-image: url("CONFIRM.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 212.5px 33.3px;
+  background-color: #1c2627;  
+}
+
+button.cancelButtonSmall{
+  width: 70%;
+  height: 50px;
+  background-image: url("CANCEL.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 179.16px 33.3px;
+  background-color: #1c2627;  
+}
+
+div.back{
+  text-align: center;
+  margin: auto;
+  margin-bottom: 1%;
+  padding-top: 10px;
+  width: 595px;
+  height: 50px;
+  background-color: #1c2627;  
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+}
+
+button.backButton{
+  outline: none;
+  width: 90%;
+  height: 70%;
+  background-image: url("BACK.png");
+  background-repeat: no-repeat;
+  background-size: 109.16px 32px;
+  background-position: center;
+  background-color: #1c2627;  
+}

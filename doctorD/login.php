@@ -10,8 +10,10 @@ $main = "
 	<link rel='stylesheet' type='text/css' href='webSiteStyleSheet.css'>
 </head>
 <body>
-	<div class='titleSpace'></div>
-	<div class='bounceTitle'></div>
+	<div class='titleSpace'>
+		<div class='bounceTitle'></div>
+	</div>
+	
 
 	<div class='cloud'></div>
 	<div class='cloud1'></div>
