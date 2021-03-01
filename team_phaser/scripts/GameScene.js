@@ -14,6 +14,7 @@ class GameScene extends Phaser.Scene {
         var frameNames = this.textures.get('characters').getFrameNames()
         this.load.image('bullet', 'assets/bullet.png')
         this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
+        this.load.image('star', 'assets/star.png');
 
         this.player
         this.keys
@@ -22,6 +23,7 @@ class GameScene extends Phaser.Scene {
         this.projectiles
         this.keys
         this.lastFiredTime = 0
+        this.stars
 
     } //end preload
 
@@ -68,6 +70,12 @@ class GameScene extends Phaser.Scene {
         }
         this.physics.add.collider(this.enemies, worldLayer)
 
+        this.stars = this.physics.add.group({
+            key: 'star',
+            repeat: 5,
+            setXY: {x: 100, y: 200, stepX: 25}
+        });
+        
 
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE'
@@ -77,6 +85,7 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
         this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
+        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     } //end create
 
     handleProjectileWorldCollision(p) {
@@ -112,6 +121,16 @@ class GameScene extends Phaser.Scene {
         })
         enemy.explode()
 
+    }
+
+    collectStar(player, star) {
+        star.disableBody(true, true);
+
+        if (this.stars.countActive(true) === 0) {
+            this.stars.children.iterate(function (child) {
+                child.enableBody(true, child.x, child.y + 50, true, true);
+            });
+        }
     }
  
     update(time, delta) {
