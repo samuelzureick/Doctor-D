@@ -6,6 +6,7 @@ class Player extends Entity {
         const anims = scene.anims
         var reflectImage = true
         this.facing = 'right'
+        this.body.setSize(15, 20, false).setOffset(10, 9);
 
         anims.create({
             key: 'move',

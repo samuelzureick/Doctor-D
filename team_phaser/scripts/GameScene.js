@@ -12,7 +12,7 @@ class GameScene extends Phaser.Scene {
 
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         var frameNames = this.textures.get('characters').getFrameNames()
-        this.load.image('bullet', 'assets/bullet.png')
+        
         this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
         this.load.image('star', 'assets/star.png');
 
@@ -58,9 +58,10 @@ class GameScene extends Phaser.Scene {
         ///////////////////////////////
         //player
         this.player = new Player(this, 200, 120, 'characters')
-     //   this.physics.add.collider(this.player, worldLayer)
+
+        this.physics.add.collider(this.player, worldLayer)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
-    //    this.player.body.setCollideWorldBounds(true)
+        this.player.body.setCollideWorldBounds(true)
         this.enemies = this.add.group()
         this.enemies.maxSize = 5
         for (let i = 0; i < this.enemies.maxSize; i++) {
