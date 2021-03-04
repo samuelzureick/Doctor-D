@@ -5,6 +5,8 @@ class Player extends Entity {
         const animFrameRate = 8
         const anims = scene.anims
         var reflectImage = true
+        this.health = 5;
+        this.maxHealth = 5;
         this.facing = 'right'
         this.body.setSize(15, 20, false).setOffset(10, 9);
 
@@ -42,7 +44,6 @@ class Player extends Entity {
             d: D
         })
     } //end constructor
-
 
     update(time, delta) {
         const {keys} = this //output: this.keys
@@ -85,7 +86,6 @@ class Player extends Entity {
         } else {
             this.anims.stop()
         }
- 
 
         /*set idle animations
         if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
@@ -101,5 +101,22 @@ class Player extends Entity {
             }
         }
         */
+    }
+
+    
+    updateHealth(amount) {
+        this.health += amount;
+        
+        if (this.health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+        
+        if (this.health <= 0) {
+            this.health = 0;
+        }
+
+        //check to see if health is working
+        console.log("HEALTH", this.health);
+
     }
 }
