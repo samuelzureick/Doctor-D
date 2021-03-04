@@ -27,6 +27,7 @@ class GameScene extends Phaser.Scene {
         this.keys
         this.lastFiredTime = 0
         this.stars
+        this.health_pickups
         this.scoreText
 
     } //end preload
@@ -80,12 +81,17 @@ class GameScene extends Phaser.Scene {
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
 
-
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
+
+        this.health_pickups = this.physics.add.group({
+            key: 'health',
+            repeat: 2,
+            setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
+        })
         
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE',
@@ -97,7 +103,8 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
         this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
+        this.physics.add.overlap(this.player, this.health_pickups, this.collectHealth, null, this)
 
         // draw player hearts
         this.heart_arr = [];
@@ -157,6 +164,16 @@ class GameScene extends Phaser.Scene {
         if (this.stars.countActive(true) === 0) {
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, child.y + 50, true, true);
+            });
+        }
+    }
+
+    collectHealth(player, heart) {
+        heart.disableBody(true, true);
+        this.addHealth()
+        if (this.health_pickups.countActive(true) === 0) {
+            this.health_pickups.children.iterate(function (child) {
+                child.enableBody(true, Phaser.Math.Between(0, 400), Phaser.Math.Between(0, 320), true, true);
             });
         }
     }
