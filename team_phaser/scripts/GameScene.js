@@ -7,6 +7,8 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.cursors
         this.cameras.main.setBackgroundColor(0x9900e3)
+
+        //load sprite images//
         this.load.image('bullet', 'teamAssets/sprites/bullet.png')
         this.load.image('tiles', 'assets/Tilemap/purple.png')
         this.load.tilemapTiledJSON('map', 'scripts/purpleMapdemo.json')
@@ -15,10 +17,12 @@ class GameScene extends Phaser.Scene {
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
         var frameNames = this.textures.get('characters').getFrameNames()
-        
+
         this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
         this.load.image('star', 'assets/star.png');
+        //////////////////////
 
+        // initialise class variables //
         this.player
         this.keys
         this.enemy
@@ -29,12 +33,13 @@ class GameScene extends Phaser.Scene {
         this.stars
         this.health_pickups
         this.scoreText
+        /////////////////////////////////
 
     } //end preload
 
     create() {    
-        //tilemap
-       const map = this.make.tilemap({
+        // create tilemap //
+        const map = this.make.tilemap({
             key: 'map'
         })
 
@@ -59,14 +64,16 @@ class GameScene extends Phaser.Scene {
             collidingTileColor: new Phaser.Display.Color(0, 0, 255),
             faceColor: new Phaser.Display.Color(0, 255, 0, 255)
         })
-
-        ///////////////////////////////
-        //player
+        /////////////////////
+        
+        // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
-
         this.physics.add.collider(this.player, worldLayer)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
+        ////////////////////////////////////
+
+        // initialise enemies + add collisions //
         this.enemies = this.add.group()
         this.enemies.maxSize = 5
         for (let i = 0; i < this.enemies.maxSize; i++) {
@@ -75,52 +82,68 @@ class GameScene extends Phaser.Scene {
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
+        /////////////////////////////////////////
 
+        // Create Score Text //
         this.scoreText = this.add.text(275, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
+        ///////////////////////
 
+        // Create Collectible Items //
+        // Coins
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
 
+        // Health Packs
         this.health_pickups = this.physics.add.group({
             key: 'health',
+            setScale: {x: 0.75, y: 0.75},
             repeat: 2,
             setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
         })
-        
+        /////////////////////////////
+
+        // Add keys for inputs + projectiles //
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE',
             plus: 'PLUS',
             minus: 'MINUS'
         })
         this.projectiles = new Projectiles(this)
-        
+        ///////////////////////////////////////
+
+        // Create collision methods //
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
         this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
         this.physics.add.overlap(this.player, this.health_pickups, this.collectHealth, null, this)
+        //////////////////////////////
 
-        // draw player hearts
+        // draw player hearts //
         this.heart_arr = [];
         
         for (var i=0; i < this.player.health; i++) {
             var heart = this.add.sprite(15 + (27  * i), 15, 'health');
             this.heart_arr.push(heart);
         }
+        /////////////////////////
 
     } //end create
 
+    // if projectile collides with map: //
     handleProjectileWorldCollision(p) {
         p.recycle()
         this.projectiles.killAndHide(p)
     }
+    //////////////////////////////////////
 
+    // if projectile collides with enemy: //
     handleProjectileEnemyCollision(enemy, projectile) {
         if (projectile.active) {
             enemy.setTint(0xff0000)
@@ -136,8 +159,9 @@ class GameScene extends Phaser.Scene {
             })
         }
     }
+    ////////////////////////////////////////
 
-    // function to handle player collision with enemy
+    // if player collides with enemy: //
     handlePlayerEnemyCollision(player, enemy) {
         this.player.score -= 5
         this.cameras.main.shake(15, 0.02)
@@ -152,11 +176,12 @@ class GameScene extends Phaser.Scene {
         })
         enemy.explode()
 
-        // decrease health by 1
         this.removeHealth()
 
     }
+    /////////////////////////////////////
 
+    // if player collides with star //
     collectStar(player, star) {
         star.disableBody(true, true);
 
@@ -167,7 +192,9 @@ class GameScene extends Phaser.Scene {
             });
         }
     }
+    //////////////////////////////////
 
+    // if player collides with health pack //
     collectHealth(player, heart) {
         heart.disableBody(true, true);
         this.addHealth()
@@ -177,7 +204,9 @@ class GameScene extends Phaser.Scene {
             });
         }
     }
+    //////////////////////////////////////////
 
+    // class to decrease and increase player's health //
     removeHealth() {
         this.player.updateHealth(-1)
         console.log(this.player.health)
@@ -188,20 +217,26 @@ class GameScene extends Phaser.Scene {
         this.player.updateHealth(1)
         this.heart_arr[this.player.health-1].visible = true
     }
+    /////////////////////////////////////////////////////
 
-    // function to handle game over
+    // if player's health = 0 //
     gameOver() {
         console.log("GAME OVER - FINAL SCORE: ", this.player.score);
         //this.scene.start('LoseScene')  use this to change to lose scene on game over
     }
+    ////////////////////////////
  
+    // general update class, ran with each game 'tick' //
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
+
+        // game over if player's health is 0
         if (this.player.health <= 0) {
             //game is over
             this.gameOver()
         }
         
+        // fire projectile if player presses space
         if(this.keys.space.isDown){
             if (time > this.lastFiredTime) {
                 this.lastFiredTime = time + 500
@@ -210,6 +245,7 @@ class GameScene extends Phaser.Scene {
         }
 
         this.player.update()
+        // update enemy group so 5 enemies are always alive 
         this.enemies.children.iterate((child) => {
             if(!child.isDead) {
                 child.update()

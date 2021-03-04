@@ -1,7 +1,9 @@
+// player class inherits from entity
 class Player extends Entity {
     constructor(scene, x, y, textureKey) {
         super(scene, x, y, textureKey, 'Player')
 
+        // initialise player variables // 
         const animFrameRate = 8
         const anims = scene.anims
         var reflectImage = true
@@ -10,7 +12,9 @@ class Player extends Entity {
         this.facing = 'right'
         this.score = 0;
         this.body.setSize(15, 20, false).setOffset(10, 9);
+        /////////////////////////////////
 
+        // create animations for player //
         anims.create({
             key: 'move',
             frames: anims.generateFrameNames(this.textureKey, {
@@ -29,9 +33,10 @@ class Player extends Entity {
             right: 73,
             up: 85
         }
-        this.setFrame(this.idleFrame.down)
+        //this.setFrame(this.idleFrame.down)
+        /////////////////////////////////
         
-        // inputs
+        // player inputs //
         // this.cursors = this.input.keyboard.createCursorKeys()
         const {LEFT,RIGHT,UP,DOWN,W,A,S,D} = Phaser.Input.Keyboard.KeyCodes
         this.keys = scene.input.keyboard.addKeys({
@@ -44,15 +49,17 @@ class Player extends Entity {
             s: S,
             d: D
         })
+        ///////////////////
     } //end constructor
 
+    // player update class - ran with every 'tick' of the game.
     update(time, delta) {
         const {keys} = this //output: this.keys
         const speed = 80
         const previousVelocity = this.body.velocity.clone()
 
+        // player movement with keypress //
         this.body.setVelocity(0)
-        //movement
         if (keys.left.isDown || keys.a.isDown) {
             this.body.setVelocityX(-speed)
         } else if (keys.right.isDown || keys.d.isDown) {
@@ -64,10 +71,11 @@ class Player extends Entity {
         } else if (keys.down.isDown || keys.s.isDown) {
             this.body.setVelocityY(speed)
         }
-
         this.body.velocity.normalize().scale(speed)
+        ////////////////////////////////////
 
-        //animations
+
+        // update player animations // 
         if (keys.up.isDown || keys.w.isDown) {
             this.flipX = this.reflectImage
             this.anims.play('move', true)
@@ -87,6 +95,7 @@ class Player extends Entity {
         } else {
             this.anims.stop()
         }
+        ////////////////////////////////
 
         /*set idle animations
         if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
@@ -102,14 +111,15 @@ class Player extends Entity {
             }
         }
         */
-    }
+    } // end player update
 
-    
+    // called when the player's health is updated.
     updateHealth(amount) {
         this.health += amount;
         
         if (this.health > this.maxHealth) {
             this.health = this.maxHealth;
+            this.score += 10;
         }
         
         if (this.health <= 0) {
