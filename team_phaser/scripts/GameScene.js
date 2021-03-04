@@ -27,6 +27,7 @@ class GameScene extends Phaser.Scene {
         this.keys
         this.lastFiredTime = 0
         this.stars
+        this.scoreText
 
     } //end preload
 
@@ -74,13 +75,18 @@ class GameScene extends Phaser.Scene {
         }
         this.physics.add.collider(this.enemies, worldLayer)
 
+        this.scoreText = this.add.text(275, 6, 'Score: 0')
+        this.scoreText.setFontSize('15px')
+        this.scoreText.setColor('#FFFFFF')
+        this.scoreText.setBackgroundColor('#000000')
+
+
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
         
-
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE',
             plus: 'PLUS',
@@ -114,6 +120,7 @@ class GameScene extends Phaser.Scene {
             this.time.addEvent({
                 delay: 30,
                 callback: () => {
+                    this.player.score += 5
                     enemy.explode()
                     projectile.recycle()
                 },
@@ -125,7 +132,8 @@ class GameScene extends Phaser.Scene {
 
     // function to handle player collision with enemy
     handlePlayerEnemyCollision(player, enemy) {
-        this.cameras.main.shake(15, 0.02) // increase to 20 once hitboxes are fixed.
+        this.player.score -= 5
+        this.cameras.main.shake(15, 0.02)
         player.setTint(0xff0000)
         this.time.addEvent({
             delay: 500,
@@ -145,6 +153,7 @@ class GameScene extends Phaser.Scene {
     collectStar(player, star) {
         star.disableBody(true, true);
 
+        this.player.score += 5
         if (this.stars.countActive(true) === 0) {
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, child.y + 50, true, true);
@@ -165,11 +174,12 @@ class GameScene extends Phaser.Scene {
 
     // function to handle game over
     gameOver() {
-        console.log("GAME OVER - FINAL HEALTH", this.player.health);
+        console.log("GAME OVER - FINAL SCORE: ", this.player.score);
         //this.scene.start('LoseScene')  use this to change to lose scene on game over
     }
  
     update(time, delta) {
+        this.scoreText.setText('Score : ' + this.player.score);
         if (this.player.health <= 0) {
             //game is over
             this.gameOver()

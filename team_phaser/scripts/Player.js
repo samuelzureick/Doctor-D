@@ -8,6 +8,7 @@ class Player extends Entity {
         this.health = 5;
         this.maxHealth = 5;
         this.facing = 'right'
+        this.score = 0;
         this.body.setSize(15, 20, false).setOffset(10, 9);
 
         anims.create({
