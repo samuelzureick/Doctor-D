@@ -20,6 +20,9 @@ class GameScene extends Phaser.Scene {
 
         this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
         this.load.image('star', 'assets/star.png');
+
+        this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
+
         //////////////////////
 
         // initialise class variables //
@@ -33,7 +36,10 @@ class GameScene extends Phaser.Scene {
         this.stars
         this.health_pickups
         this.scoreText
-        /////////////////////////////////
+        this.toggleObjectives
+        this.togglePause
+        this.isPause
+        this.isObjective
 
     } //end preload
 
@@ -64,14 +70,12 @@ class GameScene extends Phaser.Scene {
             collidingTileColor: new Phaser.Display.Color(0, 0, 255),
             faceColor: new Phaser.Display.Color(0, 255, 0, 255)
         })
-        /////////////////////
         
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
         this.physics.add.collider(this.player, worldLayer)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
-        ////////////////////////////////////
 
         // initialise enemies + add collisions //
         this.enemies = this.add.group()
@@ -82,14 +86,12 @@ class GameScene extends Phaser.Scene {
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
-        /////////////////////////////////////////
 
         // Create Score Text //
         this.scoreText = this.add.text(275, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
-        ///////////////////////
 
         // Create Collectible Items //
         // Coins
@@ -106,16 +108,25 @@ class GameScene extends Phaser.Scene {
             repeat: 2,
             setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
         })
-        /////////////////////////////
+
+        // Initialise Objectives and Pause Screen
+        this.createObjectivesScreen();
+        this.createPauseScreen();
+
+        // Draw Objective Button //
+        this.add.image(15, 40, 'crateButton').setInteractive();
+        this.input.on('gameobjectup', this.clickObjective, this);
 
         // Add keys for inputs + projectiles //
+        const {Q} = Phaser.Input.Keyboard.KeyCodes
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE',
             plus: 'PLUS',
-            minus: 'MINUS'
+            minus: 'MINUS',
+            esc: 'ESC',
+            q: Q
         })
         this.projectiles = new Projectiles(this)
-        ///////////////////////////////////////
 
         // Create collision methods //
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
@@ -123,7 +134,6 @@ class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
         this.physics.add.overlap(this.player, this.health_pickups, this.collectHealth, null, this)
-        //////////////////////////////
 
         // draw player hearts //
         this.heart_arr = [];
@@ -132,7 +142,6 @@ class GameScene extends Phaser.Scene {
             var heart = this.add.sprite(15 + (27  * i), 15, 'health');
             this.heart_arr.push(heart);
         }
-        /////////////////////////
 
     } //end create
 
@@ -141,7 +150,6 @@ class GameScene extends Phaser.Scene {
         p.recycle()
         this.projectiles.killAndHide(p)
     }
-    //////////////////////////////////////
 
     // if projectile collides with enemy: //
     handleProjectileEnemyCollision(enemy, projectile) {
@@ -150,7 +158,7 @@ class GameScene extends Phaser.Scene {
             this.time.addEvent({
                 delay: 30,
                 callback: () => {
-                    this.player.score += 5
+                    this.player.updateScore(5);
                     enemy.explode()
                     projectile.recycle()
                 },
@@ -159,11 +167,10 @@ class GameScene extends Phaser.Scene {
             })
         }
     }
-    ////////////////////////////////////////
 
     // if player collides with enemy: //
     handlePlayerEnemyCollision(player, enemy) {
-        this.player.score -= 5
+        this.player.updateScore(-5);
         this.cameras.main.shake(15, 0.02)
         player.setTint(0xff0000)
         this.time.addEvent({
@@ -179,20 +186,19 @@ class GameScene extends Phaser.Scene {
         this.removeHealth()
 
     }
-    /////////////////////////////////////
 
     // if player collides with star //
     collectStar(player, star) {
         star.disableBody(true, true);
 
-        this.player.score += 5
+        this.player.updateScore(5);
+        this.player.addCoin()
         if (this.stars.countActive(true) === 0) {
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, child.y + 50, true, true);
             });
         }
     }
-    //////////////////////////////////
 
     // if player collides with health pack //
     collectHealth(player, heart) {
@@ -204,7 +210,66 @@ class GameScene extends Phaser.Scene {
             });
         }
     }
-    //////////////////////////////////////////
+
+    // creates the dark background for the objectives and pause screen
+    createVeil() {
+        this.veil = this.add.graphics({x : 0, y: 0});
+        this.veil.fillStyle('0x000000', 0.75);
+        this.veil.fillRect(0, 0, 400, 320);
+        this.veil.setDepth(100);
+        this.veil.setScrollFactor(0);
+    }
+
+    // creates an objectives screen, then 'hides' it
+    createObjectivesScreen() {
+        this.createVeil();
+        this.textObjective = this.add.text(150, 45, 'OBJECTIVES');
+        this.textObjective.setDepth(101);
+        this.textObjective.setScrollFactor(0);
+
+        this.Objective = this.add.text(100, 100, 'Collect 5 Stars');
+        this.Objective.setDepth(101);
+        this.Objective.setScrollFactor(0);
+
+
+        this.toggleScreen(false, "objectives");
+    }
+    
+    // creates a pause screen, then 'hides' it
+    createPauseScreen() {
+        this.createVeil()
+        this.textPause = this.add.text(175, 45, 'PAUSE');
+        this.textPause.setDepth(101);
+        this.textPause.setScrollFactor(0);
+
+        this.toggleScreen(false, "pause");
+    }
+
+    // displays the 'veil' and then displays either the pause / objectives screen
+    toggleScreen(isVisible, whichScreen) {
+        this.veil.setVisible(isVisible);
+        if (whichScreen == "objectives") {
+            this.textObjective.setVisible(isVisible);
+            if(this.player.getCoin() >= 5) {
+                this.Objective.setText('Collect 5 Stars ✓');
+            }
+            this.Objective.setVisible(isVisible);
+        } else if (whichScreen == "pause") {
+            this.textPause.setVisible(isVisible);
+        }
+    }
+
+    // is called when the user clicks the objective button / presses q
+    clickObjective() {
+        this.isObjective = !this.isObjective
+        this.toggleScreen(this.isObjective, "objectives");
+    }
+
+    // is called when the user clicks the pause button / presses esc
+    clickPause() {
+        this.isPause = !this.isPause
+        this.toggleScreen(this.isPause, "pause")
+    }
 
     // class to decrease and increase player's health //
     removeHealth() {
@@ -217,14 +282,12 @@ class GameScene extends Phaser.Scene {
         this.player.updateHealth(1)
         this.heart_arr[this.player.health-1].visible = true
     }
-    /////////////////////////////////////////////////////
 
     // if player's health = 0 //
     gameOver() {
         console.log("GAME OVER - FINAL SCORE: ", this.player.score);
         //this.scene.start('LoseScene')  use this to change to lose scene on game over
     }
-    ////////////////////////////
  
     // general update class, ran with each game 'tick' //
     update(time, delta) {
@@ -242,6 +305,30 @@ class GameScene extends Phaser.Scene {
                 this.lastFiredTime = time + 500
                 this.projectiles.fireProjectile(this.player.x, this.player.y, this.player.facing)
             }
+        }
+
+        // open objectives menu if player presses q
+        if(this.keys.q.isDown) {
+            if (!this.toggleObjectives && !this.isPause) {
+                this.toggleObjectives = true;
+                this.clickObjective();
+            }
+        }
+
+        if(this.keys.q.isUp) {
+            this.toggleObjectives = false;
+        }
+
+        // open pause menu if player presses pause
+        if(this.keys.esc.isDown) {
+            if (!this.togglePause && !this.isObjective) {
+                this.togglePause = true;
+                this.clickPause();
+            }
+        }
+
+        if (this.keys.esc.isUp) {
+            this.togglePause = false;
         }
 
         this.player.update()

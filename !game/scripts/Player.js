@@ -11,8 +11,8 @@ class Player extends Entity {
         this.maxHealth = 5;
         this.facing = 'right'
         this.score = 0;
+        this.coinsCollected = 0;
         this.body.setSize(15, 20, false).setOffset(10, 9);
-        /////////////////////////////////
 
         // create animations for player //
         anims.create({
@@ -34,7 +34,6 @@ class Player extends Entity {
             up: 85
         }
         //this.setFrame(this.idleFrame.down)
-        /////////////////////////////////
         
         // player inputs //
         // this.cursors = this.input.keyboard.createCursorKeys()
@@ -49,7 +48,6 @@ class Player extends Entity {
             s: S,
             d: D
         })
-        ///////////////////
     } //end constructor
 
     // player update class - ran with every 'tick' of the game.
@@ -72,8 +70,6 @@ class Player extends Entity {
             this.body.setVelocityY(speed)
         }
         this.body.velocity.normalize().scale(speed)
-        ////////////////////////////////////
-
 
         // update player animations // 
         if (keys.up.isDown || keys.w.isDown) {
@@ -95,7 +91,6 @@ class Player extends Entity {
         } else {
             this.anims.stop()
         }
-        ////////////////////////////////
 
         /*set idle animations
         if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
@@ -126,8 +121,17 @@ class Player extends Entity {
             this.health = 0;
         }
 
-        //check to see if health is working
-        console.log("HEALTH", this.health);
+    }
 
+    addCoin() {
+        this.coinsCollected += 1;
+    }
+
+    getCoin() {
+        return this.coinsCollected;
+    }
+
+    updateScore(amount) {
+        this.score += amount;
     }
 }
