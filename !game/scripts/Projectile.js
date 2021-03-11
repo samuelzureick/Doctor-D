@@ -5,12 +5,14 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         this.y = 200
     }
 
+    // called when the player presses the spacebar
     fire(x, y, dir) {
+        // displays the projectile
         this.body.reset(x, y)
         this.setActive(true)
         this.setVisible(true)
         
-        this.dir = dir
+        this.dir = dir // dir = direction
         switch(dir){
             case 'left':
                 this.setVelocity(-200, 0)
@@ -29,6 +31,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     }
 }
 
+// Class for the Sprite Group
 class Projectiles extends Phaser.Physics.Arcade.Group {
     constructor (scene) {
         super(scene.physics.world, scene);

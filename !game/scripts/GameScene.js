@@ -49,11 +49,11 @@ class GameScene extends Phaser.Scene {
             key: 'map'
         })
 
+        // setting up tilemap, layers and collisions //
         const tileset = map.addTilesetImage('purple', 'tiles')
         const belowLayer = map.createStaticLayer('below player', tileset, 0, 0)
         const worldLayer = map.createStaticLayer('world', tileset, 0, 0)
         const aboveLayer = map.createStaticLayer('above player', tileset, 0, 0)
-
         aboveLayer.setDepth(100)
 
         worldLayer.setCollisionByProperty({
@@ -159,6 +159,7 @@ class GameScene extends Phaser.Scene {
                 delay: 30,
                 callback: () => {
                     this.player.updateScore(5);
+                    this.player.addEnemy();
                     enemy.explode()
                     projectile.recycle()
                 },
@@ -170,13 +171,14 @@ class GameScene extends Phaser.Scene {
 
     // if player collides with enemy: //
     handlePlayerEnemyCollision(player, enemy) {
-        this.player.updateScore(-5);
+        player.updateScore(-5);
         this.cameras.main.shake(15, 0.02)
         player.setTint(0xff0000)
         this.time.addEvent({
             delay: 500,
             callback: () => {
                 player.clearTint()
+                player.addEnemy()
             },
             callbackScope: this,
             loop: false
@@ -227,10 +229,13 @@ class GameScene extends Phaser.Scene {
         this.textObjective.setDepth(101);
         this.textObjective.setScrollFactor(0);
 
-        this.Objective = this.add.text(100, 100, 'Collect 5 Stars');
-        this.Objective.setDepth(101);
-        this.Objective.setScrollFactor(0);
+        this.CollectObjective = this.add.text(100, 100, 'Collect 5 Stars');
+        this.CollectObjective.setDepth(101);
+        this.CollectObjective.setScrollFactor(0);
 
+        this.EnemyObjective = this.add.text(100, 130, 'Eliminate 5 Enemies');
+        this.EnemyObjective.setDepth(101);
+        this.EnemyObjective.setScrollFactor(0);
 
         this.toggleScreen(false, "objectives");
     }
@@ -248,12 +253,21 @@ class GameScene extends Phaser.Scene {
     // displays the 'veil' and then displays either the pause / objectives screen
     toggleScreen(isVisible, whichScreen) {
         this.veil.setVisible(isVisible);
+
+        // need an if-statement so the objectives page and pause page can't be displayed at the same time
         if (whichScreen == "objectives") {
             this.textObjective.setVisible(isVisible);
+
+            // check if player has completed either objective.
             if(this.player.getCoin() >= 5) {
-                this.Objective.setText('Collect 5 Stars ✓');
+                this.CollectObjective.setText('Collect 5 Stars ✓');
             }
-            this.Objective.setVisible(isVisible);
+            this.CollectObjective.setVisible(isVisible);
+            
+            if(this.player.getEnemy() >= 5) {
+                this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
+            }
+            this.EnemyObjective.setVisible(isVisible);
         } else if (whichScreen == "pause") {
             this.textPause.setVisible(isVisible);
         }

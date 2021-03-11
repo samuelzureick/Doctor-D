@@ -1,4 +1,3 @@
-// player class inherits from entity
 class Player extends Entity {
     constructor(scene, x, y, textureKey) {
         super(scene, x, y, textureKey, 'Player')
@@ -12,6 +11,7 @@ class Player extends Entity {
         this.facing = 'right'
         this.score = 0;
         this.coinsCollected = 0;
+        this.enemiesEliminated = 0;
         this.body.setSize(15, 20, false).setOffset(10, 9);
 
         // create animations for player //
@@ -108,6 +108,11 @@ class Player extends Entity {
         */
     } // end player update
 
+    // updates the player's score
+    updateScore(amount) {
+        this.score += amount;
+    }
+
     // called when the player's health is updated.
     updateHealth(amount) {
         this.health += amount;
@@ -123,15 +128,24 @@ class Player extends Entity {
 
     }
 
+    // called when a player collides with a coin
     addCoin() {
         this.coinsCollected += 1;
     }
 
+    // returns how many coins the player has collected.
     getCoin() {
         return this.coinsCollected;
     }
 
-    updateScore(amount) {
-        this.score += amount;
+    // called when a player eliminates an enemy
+    addEnemy() {
+        this.enemiesEliminated += 1;
     }
+
+    // returns how many enemies the player has eliminated.
+    getEnemy() {
+        return this.enemiesEliminated += 1;
+    }
+
 }

@@ -2,6 +2,7 @@ class Enemy extends Entity {
     constructor(scene, x, y, textureKey){
         super(scene, x, y, textureKey, 'Enemy')
 
+        // set up enemy animations
         const anims = scene.anims
         const animFrameRate = 4
         this.textureKey = textureKey
@@ -56,7 +57,7 @@ class Enemy extends Entity {
             repeat: -1
         })
 
-
+        // set up enemy movement and direction
         this.body.setVelocity(0, this.speed)
         let dir = Math.floor(Math.random()*4)
         switch (dir){
@@ -84,8 +85,9 @@ class Enemy extends Entity {
 
     update(){
         const {speed} = this    //this.speed
-        const enemyBlocked = this.body.blocked
 
+        // if the enemy is blocked by a wall, then change direction randomly
+        const enemyBlocked = this.body.blocked
         if (enemyBlocked.down || enemyBlocked.left || enemyBlocked.up || enemyBlocked.right){
 
             let possibleDirections = []
