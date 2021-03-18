@@ -45,6 +45,7 @@ class GameScene extends Phaser.Scene {
 
     create() {    
         // create tilemap //
+
         const map = this.make.tilemap({
             key: 'map'
         })
@@ -156,10 +157,11 @@ class GameScene extends Phaser.Scene {
         if (projectile.active) {
             enemy.setTint(0xff0000)
             this.time.addEvent({
-                delay: 30,
+                delay: 10,
                 callback: () => {
                     this.player.updateScore(5);
                     this.player.addEnemy();
+                    console.log(this.player.getEnemy());
                     enemy.explode()
                     projectile.recycle()
                 },
@@ -178,7 +180,7 @@ class GameScene extends Phaser.Scene {
             delay: 500,
             callback: () => {
                 player.clearTint()
-                player.addEnemy()
+                // player.addEnemy()
             },
             callbackScope: this,
             loop: false
@@ -265,6 +267,7 @@ class GameScene extends Phaser.Scene {
             this.CollectObjective.setVisible(isVisible);
             
             if(this.player.getEnemy() >= 5) {
+                console.log("hi")
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
             }
             this.EnemyObjective.setVisible(isVisible);

@@ -145,7 +145,10 @@ class Player extends Entity {
 
     // returns how many enemies the player has eliminated.
     getEnemy() {
-        return this.enemiesEliminated += 1;
+        console.log("current enemies defeated:");
+        console.log(this.enemiesEliminated);
+        return this.enemiesEliminated;
+
     }
 
 }
