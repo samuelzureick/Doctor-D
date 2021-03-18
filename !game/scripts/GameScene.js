@@ -10,8 +10,8 @@ class GameScene extends Phaser.Scene {
 
         //load sprite images//
         this.load.image('bullet', 'teamAssets/sprites/bullet.png')
-        this.load.image('tiles', 'assets/Tilemap/purple.png')
-        this.load.tilemapTiledJSON('map', 'scripts/purpleMapdemo.json')
+        this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
+        this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
 
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
