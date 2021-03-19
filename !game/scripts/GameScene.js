@@ -1,5 +1,8 @@
 class GameScene extends Phaser.Scene {
     
+
+    countdown
+
     constructor() {
         super('GameScene')
     }
@@ -38,6 +41,7 @@ class GameScene extends Phaser.Scene {
         this.scoreText
         this.toggleObjectives
         this.togglePause
+        this.timerLabel
         this.isPause
         this.isObjective
 
@@ -45,6 +49,7 @@ class GameScene extends Phaser.Scene {
 
     create() {    
         // create tilemap //
+
         const map = this.make.tilemap({
             key: 'map'
         })
@@ -63,6 +68,16 @@ class GameScene extends Phaser.Scene {
         this.physics.world.bounds.width = map.widthInPixels
         this.physics.world.bounds.height = map.heightInPixels
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+
+        //for timer
+        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5);
+        this.timerLabel.setDepth(101);
+
+
+        this.countdown = new CountdownController(this, this.timerLabel);
+        this.countdown.start(this.handleCountdownFinsihed.bind(this)); 
+        this.timerLabel.setVisible(false)
+
 
         const debugGraphics = this.add.graphics().setAlpha(0.2)
         worldLayer.renderDebug(debugGraphics, {
@@ -145,6 +160,11 @@ class GameScene extends Phaser.Scene {
 
     } //end create
 
+    handleCountdownFinsihed()
+    {
+
+    }
+
     // if projectile collides with map: //
     handleProjectileWorldCollision(p) {
         p.recycle()
@@ -156,7 +176,7 @@ class GameScene extends Phaser.Scene {
         if (projectile.active) {
             enemy.setTint(0xff0000)
             this.time.addEvent({
-                delay: 30,
+                delay: 10,
                 callback: () => {
                     this.player.updateScore(5);
                     this.player.addEnemy();
@@ -178,7 +198,7 @@ class GameScene extends Phaser.Scene {
             delay: 500,
             callback: () => {
                 player.clearTint()
-                player.addEnemy()
+                // player.addEnemy()
             },
             callbackScope: this,
             loop: false
@@ -257,6 +277,7 @@ class GameScene extends Phaser.Scene {
         // need an if-statement so the objectives page and pause page can't be displayed at the same time
         if (whichScreen == "objectives") {
             this.textObjective.setVisible(isVisible);
+            this.timerLabel.setVisible(isVisible);
 
             // check if player has completed either objective.
             if(this.player.getCoin() >= 5) {
@@ -265,6 +286,7 @@ class GameScene extends Phaser.Scene {
             this.CollectObjective.setVisible(isVisible);
             
             if(this.player.getEnemy() >= 5) {
+                console.log("hi")
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
             }
             this.EnemyObjective.setVisible(isVisible);
@@ -365,6 +387,9 @@ class GameScene extends Phaser.Scene {
         }
 
         })
+
+        //timer
+        this.countdown.update();
     } //end update
 
 
