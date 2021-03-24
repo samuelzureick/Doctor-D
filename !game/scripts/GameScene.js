@@ -9,7 +9,7 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x9900e3)
 
         //load sprite images//
-        this.load.image('bullet', 'teamAssets/sprites/bullet.png')
+        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun_shell_0.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
 
@@ -313,11 +313,14 @@ class GameScene extends Phaser.Scene {
             this.gameOver()
         }
         
-        // fire projectile if player presses space
-        if(this.keys.space.isDown){
+        // fire projectile on mouse click in mouse direction
+        this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0.cur), pointer')
+        var pointer = this.input.activePointer;
+        if (pointer.leftButtonDown()) {
             if (time > this.lastFiredTime) {
-                this.lastFiredTime = time + 500
-                this.projectiles.fireProjectile(this.player.x, this.player.y, this.player.facing)
+                this.lastFiredTime = time + 200;
+                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer);
+                
             }
         }
 
