@@ -1,5 +1,11 @@
 class GameScene extends Phaser.Scene {
     
+<<<<<<< HEAD
+=======
+
+    countdown
+
+>>>>>>> bozho
     constructor() {
         super('GameScene')
     }
@@ -9,7 +15,11 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x9900e3)
 
         //load sprite images//
+<<<<<<< HEAD
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
+=======
+        this.load.image('bullet', 'teamAssets/sprites/bullet.png')
+>>>>>>> bozho
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
 
@@ -38,6 +48,10 @@ class GameScene extends Phaser.Scene {
         this.scoreText
         this.toggleObjectives
         this.togglePause
+<<<<<<< HEAD
+=======
+        this.timerLabel
+>>>>>>> bozho
         this.isPause
         this.isObjective
 
@@ -45,6 +59,10 @@ class GameScene extends Phaser.Scene {
 
     create() {    
         // create tilemap //
+<<<<<<< HEAD
+=======
+
+>>>>>>> bozho
         const map = this.make.tilemap({
             key: 'map'
         })
@@ -64,6 +82,19 @@ class GameScene extends Phaser.Scene {
         this.physics.world.bounds.height = map.heightInPixels
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
+<<<<<<< HEAD
+=======
+        //for timer
+        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5);
+        this.timerLabel.setDepth(101);
+
+
+        this.countdown = new CountdownController(this, this.timerLabel);
+        this.countdown.start(this.handleCountdownFinsihed.bind(this)); 
+        this.timerLabel.setVisible(false)
+
+
+>>>>>>> bozho
         const debugGraphics = this.add.graphics().setAlpha(0.2)
         worldLayer.renderDebug(debugGraphics, {
             tileColor: null,
@@ -145,6 +176,14 @@ class GameScene extends Phaser.Scene {
 
     } //end create
 
+<<<<<<< HEAD
+=======
+    handleCountdownFinsihed()
+    {
+
+    }
+
+>>>>>>> bozho
     // if projectile collides with map: //
     handleProjectileWorldCollision(p) {
         p.recycle()
@@ -156,7 +195,11 @@ class GameScene extends Phaser.Scene {
         if (projectile.active) {
             enemy.setTint(0xff0000)
             this.time.addEvent({
+<<<<<<< HEAD
                 delay: 30,
+=======
+                delay: 10,
+>>>>>>> bozho
                 callback: () => {
                     this.player.updateScore(5);
                     this.player.addEnemy();
@@ -178,7 +221,11 @@ class GameScene extends Phaser.Scene {
             delay: 500,
             callback: () => {
                 player.clearTint()
+<<<<<<< HEAD
                 player.addEnemy()
+=======
+                // player.addEnemy()
+>>>>>>> bozho
             },
             callbackScope: this,
             loop: false
@@ -257,6 +304,10 @@ class GameScene extends Phaser.Scene {
         // need an if-statement so the objectives page and pause page can't be displayed at the same time
         if (whichScreen == "objectives") {
             this.textObjective.setVisible(isVisible);
+<<<<<<< HEAD
+=======
+            this.timerLabel.setVisible(isVisible);
+>>>>>>> bozho
 
             // check if player has completed either objective.
             if(this.player.getCoin() >= 5) {
@@ -265,6 +316,10 @@ class GameScene extends Phaser.Scene {
             this.CollectObjective.setVisible(isVisible);
             
             if(this.player.getEnemy() >= 5) {
+<<<<<<< HEAD
+=======
+                console.log("hi")
+>>>>>>> bozho
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
             }
             this.EnemyObjective.setVisible(isVisible);
@@ -313,6 +368,7 @@ class GameScene extends Phaser.Scene {
             this.gameOver()
         }
         
+<<<<<<< HEAD
         // fire projectile on mouse click in mouse direction
         this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png), pointer')
         var pointer = this.input.activePointer;
@@ -320,6 +376,13 @@ class GameScene extends Phaser.Scene {
             if (time > this.lastFiredTime) {
                 this.lastFiredTime = time + 200
                 this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer)
+=======
+        // fire projectile if player presses space
+        if(this.keys.space.isDown){
+            if (time > this.lastFiredTime) {
+                this.lastFiredTime = time + 500
+                this.projectiles.fireProjectile(this.player.x, this.player.y, this.player.facing)
+>>>>>>> bozho
             }
         }
 
@@ -367,6 +430,12 @@ class GameScene extends Phaser.Scene {
         }
 
         })
+<<<<<<< HEAD
+=======
+
+        //timer
+        this.countdown.update();
+>>>>>>> bozho
     } //end update
 
 
