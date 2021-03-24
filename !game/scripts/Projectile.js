@@ -33,7 +33,7 @@ class Projectiles extends Phaser.Physics.Arcade.Group {
     constructor (scene) {
         super(scene.physics.world, scene);
         this.createMultiple({
-            frameQuantity: 100,
+            frameQuantity: 5,
             key: 'bullet',
             active: false,
             visible: false,
@@ -41,10 +41,10 @@ class Projectiles extends Phaser.Physics.Arcade.Group {
         })
     }
 
-    fireProjectile(x, y, scene, pointer) {
+    fireProjectile(x, y, facing) {
         let projectile = this.getFirstDead(false)
         if (projectile) {
-            projectile.fire(x, y, scene, pointer)
+            projectile.fire(x, y, facing)
         }
     }
 }
