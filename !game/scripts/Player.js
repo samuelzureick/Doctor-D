@@ -12,7 +12,7 @@ class Player extends Entity {
         this.score = 0;
         this.coinsCollected = 0;
         this.enemiesEliminated = 0;
-        this.body.setSize(15, 20, false).setOffset(10, 9);
+        this.body.setSize(10, 10, false).setOffset(15, 20);
 
         // create animations for player //
         anims.create({
@@ -145,11 +145,7 @@ class Player extends Entity {
 
     // returns how many enemies the player has eliminated.
     getEnemy() {
-
         return this.enemiesEliminated += 1;
-
-        return this.enemiesEliminated;
-
     }
 
 }
