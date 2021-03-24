@@ -145,12 +145,11 @@ class Player extends Entity {
 
     // returns how many enemies the player has eliminated.
     getEnemy() {
-<<<<<<< HEAD
+
         return this.enemiesEliminated += 1;
-=======
+
         return this.enemiesEliminated;
 
->>>>>>> bozho
     }
 
 }
