@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class GameScene extends Phaser.Scene {
     
     constructor() {
@@ -71,9 +70,6 @@ class GameScene extends Phaser.Scene {
             collidingTileColor: new Phaser.Display.Color(0, 0, 255),
             faceColor: new Phaser.Display.Color(0, 255, 0, 255)
         })
-=======
-class GameScene extends Phaser.Scene {  
->>>>>>> origin/master
         
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
@@ -268,7 +264,6 @@ class GameScene extends Phaser.Scene {
             }
             this.CollectObjective.setVisible(isVisible);
             
-<<<<<<< HEAD
             if(this.player.getEnemy() >= 5) {
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
             }
@@ -362,16 +357,6 @@ class GameScene extends Phaser.Scene {
                     e.body.setCollideWorldBounds(true)
                     this.enemies.add(e)
                 }
-=======
-            // fire projectile on mouse click in mouse direction
-        this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png), pointer')
-        var pointer = this.input.activePointer;
-        if (pointer.leftButtonDown()) {
-            if (time > this.lastFiredTime) {
-                this.lastFiredTime = time + 200;
-                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer);
-                
->>>>>>> origin/master
             }
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
