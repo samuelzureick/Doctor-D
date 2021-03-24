@@ -1,4 +1,75 @@
-class GameScene extends Phaser.Scene {  
+class GameScene extends Phaser.Scene {
+    
+    constructor() {
+        super('GameScene')
+    }
+
+    preload() {
+        this.cursors
+        this.cameras.main.setBackgroundColor(0x9900e3)
+
+        //load sprite images//
+        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
+        this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
+        this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
+
+        this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
+        this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
+        this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
+        var frameNames = this.textures.get('characters').getFrameNames()
+
+        this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
+        this.load.image('star', 'assets/star.png');
+
+        this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
+
+        //////////////////////
+
+        // initialise class variables //
+        this.player
+        this.keys
+        this.enemy
+        this.enemies
+        this.projectiles
+        this.keys
+        this.lastFiredTime = 0
+        this.stars
+        this.health_pickups
+        this.scoreText
+        this.toggleObjectives
+        this.togglePause
+        this.isPause
+        this.isObjective
+
+    } //end preload
+
+    create() {    
+        // create tilemap //
+        const map = this.make.tilemap({
+            key: 'map'
+        })
+
+        // setting up tilemap, layers and collisions //
+        const tileset = map.addTilesetImage('purple', 'tiles')
+        const belowLayer = map.createStaticLayer('below player', tileset, 0, 0)
+        const worldLayer = map.createStaticLayer('world', tileset, 0, 0)
+        const aboveLayer = map.createStaticLayer('above player', tileset, 0, 0)
+        aboveLayer.setDepth(100)
+
+        worldLayer.setCollisionByProperty({
+            collides: true
+        })
+
+        this.physics.world.bounds.width = map.widthInPixels
+        this.physics.world.bounds.height = map.heightInPixels
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+
+        const debugGraphics = this.add.graphics().setAlpha(0.2)
+        worldLayer.renderDebug(debugGraphics, {
+            tileColor: null,
+            collidingTileColor: new Phaser.Display.Color(0, 0, 255),
+            faceColor: new Phaser.Display.Color(0, 255, 0, 255)
+        })
         
     countdown   
     constructor() { 
@@ -279,14 +350,99 @@ class GameScene extends Phaser.Scene {
             this.gameOver() 
         }   
             
-            // fire projectile on mouse click in mouse direction
+            if(this.player.getEnemy() >= 5) {
+                this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
+            }
+            this.EnemyObjective.setVisible(isVisible);
+        } else if (whichScreen == "pause") {
+            this.textPause.setVisible(isVisible);
+        }
+    }
+
+    // is called when the user clicks the objective button / presses q
+    clickObjective() {
+        this.isObjective = !this.isObjective
+        this.toggleScreen(this.isObjective, "objectives");
+    }
+
+    // is called when the user clicks the pause button / presses esc
+    clickPause() {
+        this.isPause = !this.isPause
+        this.toggleScreen(this.isPause, "pause")
+    }
+
+    // class to decrease and increase player's health //
+    removeHealth() {
+        this.player.updateHealth(-1)
+        console.log(this.player.health)
+        this.heart_arr[this.player.health].visible = false
+    }
+
+    addHealth() {
+        this.player.updateHealth(1)
+        this.heart_arr[this.player.health-1].visible = true
+    }
+
+    // if player's health = 0 //
+    gameOver() {
+        console.log("GAME OVER - FINAL SCORE: ", this.player.score);
+        //this.scene.start('LoseScene')  use this to change to lose scene on game over
+    }
+ 
+    // general update class, ran with each game 'tick' //
+    update(time, delta) {
+        this.scoreText.setText('Score : ' + this.player.score);
+
+        // game over if player's health is 0
+        if (this.player.health <= 0) {
+            //game is over
+            this.gameOver()
+        }
+        
+        // fire projectile on mouse click in mouse direction
         this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png), pointer')
         var pointer = this.input.activePointer;
-        if (pointer.leftButtonDown()) {
+        if(pointer.leftButtonDown()){
             if (time > this.lastFiredTime) {
-                this.lastFiredTime = time + 200;
-                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer);
-                
+                this.lastFiredTime = time + 200
+                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer)
+            }
+        }
+
+        // open objectives menu if player presses q
+        if(this.keys.q.isDown) {
+            if (!this.toggleObjectives && !this.isPause) {
+                this.toggleObjectives = true;
+                this.clickObjective();
+            }
+        }
+
+        if(this.keys.q.isUp) {
+            this.toggleObjectives = false;
+        }
+
+        // open pause menu if player presses pause
+        if(this.keys.esc.isDown) {
+            if (!this.togglePause && !this.isObjective) {
+                this.togglePause = true;
+                this.clickPause();
+            }
+        }
+
+        if (this.keys.esc.isUp) {
+            this.togglePause = false;
+        }
+
+        this.player.update()
+        // update enemy group so 5 enemies are always alive 
+        this.enemies.children.iterate((child) => {
+            if(!child.isDead) {
+                child.update()
+                if (!this.enemies.isFull()){
+                    const e = new Enemy(this, 220, 250, 'enemy')
+                    e.body.setCollideWorldBounds(true)
+                    this.enemies.add(e)
+                }
             }
         }
         // open objectives menu if player presses q 

@@ -3,12 +3,17 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'bullet')
         this.x = 200
         this.y = 200
+        scene.add.existing(this)
+        scene.physics.add.existing(this)
     }
 
+    // called when the player presses the spacebar
     fire(x, y, scene, pointer) {
+        // displays the projectile
         this.body.reset(x, y)
         this.setActive(true)
         this.setVisible(true)
+        
         this.setSize(15,3)
 
         let angle = Phaser.Math.Angle.BetweenPoints(this, pointer)
@@ -28,7 +33,7 @@ class Projectiles extends Phaser.Physics.Arcade.Group {
     constructor (scene) {
         super(scene.physics.world, scene);
         this.createMultiple({
-            frameQuantity: 100,
+            frameQuantity: 40,
             key: 'bullet',
             active: false,
             visible: false,
