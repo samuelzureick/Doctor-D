@@ -3,6 +3,8 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'bullet')
         this.x = 200
         this.y = 200
+        scene.add.existing(this)
+        scene.physics.add.existing(this)
     }
 
     // called when the player presses the spacebar
