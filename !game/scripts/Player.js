@@ -51,7 +51,7 @@ class Player extends Entity {
     } //end constructor
 
     // player update class - ran with every 'tick' of the game.
-    update(time, delta) {
+    update(time, delta, pointer) {
         const {keys} = this //output: this.keys
         const speed = 80
         const previousVelocity = this.body.velocity.clone()
@@ -79,17 +79,27 @@ class Player extends Entity {
             this.flipX = this.reflectImage
             this.anims.play('move', true)
         } else if (keys.left.isDown || keys.a.isDown) {
-            this.reflectImage = true
-            this.flipX = this.reflectImage
             this.anims.play('move', true)
-            this.facing = "left"
         } else if (keys.right.isDown || keys.d.isDown) {
-            this.reflectImage = false
-            this.flipX = this.reflectImage
             this.anims.play('move', true)
-            this.facing = "right"
         } else {
             this.anims.stop()
+        }
+
+        let angle = Phaser.Math.Angle.BetweenPoints(this, pointer)
+        //console.log(angle)
+
+        var pi = 3.14159265359
+        if (angle * angle < pi / 2) {
+            this.reflectImage = false
+            this.flipX = this.reflectImage
+            this.facing = "right"
+        }
+
+        else if (angle * angle > pi/2 ) {
+            this.reflectImage = true
+            this.flipX = this.reflectImage
+            this.facing = "left"
         }
 
         /*set idle animations

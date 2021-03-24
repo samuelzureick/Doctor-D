@@ -10,27 +10,26 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x9900e3)
 
         //load sprite images//
+        this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
-
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
         var frameNames = this.textures.get('characters').getFrameNames()
-
         this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
         this.load.image('star', 'assets/star.png');
-
         this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
 
-        //////////////////////
+        //////////////////////////////////////////////////////////////////////////
 
         // initialise class variables //
         this.player
         this.keys
         this.enemy
         this.enemies
+        this.gun
         this.projectiles
         this.keys
         this.lastFiredTime = 0
@@ -43,9 +42,10 @@ class GameScene extends Phaser.Scene {
         this.isPause
         this.isObjective
 
-    } //end preload
+    } // end preload
 
     create() {    
+        
         // create tilemap //
         const map = this.make.tilemap({
             key: 'map'
@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
         this.physics.world.bounds.height = map.heightInPixels
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
-//for timer
+        // for timer //
         this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5);
         this.timerLabel.setDepth(101);
         this.countdown = new CountdownController(this, this.timerLabel);
@@ -86,6 +86,10 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
 
+        // initialise gun //
+        this.gun = new Gun(this, 200, 120, 'gun')
+        //this.gun.startFollow(this.player)
+
         // initialise enemies + add collisions //
         this.enemies = this.add.group()
         this.enemies.maxSize = 5
@@ -102,15 +106,15 @@ class GameScene extends Phaser.Scene {
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
 
-        // Create Collectible Items //
-        // Coins
+        ///// Collectible Items /////
+        // Coins //
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
 
-        // Health Packs
+        // Health Packs //
         this.health_pickups = this.physics.add.group({
             key: 'health',
             setScale: {x: 0.75, y: 0.75},
@@ -118,7 +122,7 @@ class GameScene extends Phaser.Scene {
             setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
         })
 
-        // Initialise Objectives and Pause Screen
+        // Initialise Objectives and Pause Screen //
         this.createObjectivesScreen();
         this.createPauseScreen();
 
@@ -144,7 +148,7 @@ class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
         this.physics.add.overlap(this.player, this.health_pickups, this.collectHealth, null, this)
 
-        // draw player hearts //
+        // Draw Player Hearts //
         this.heart_arr = [];
         
         for (var i=0; i < this.player.health; i++) {
@@ -157,13 +161,13 @@ class GameScene extends Phaser.Scene {
     {   
     }   
 
-    // if projectile collides with map: //
+    // Projectile-Map Collision //
     handleProjectileWorldCollision(p) {
         p.recycle()
         this.projectiles.killAndHide(p)
     }
 
-    // if projectile collides with enemy: //
+    // Projectile-Enemy Collision //
     handleProjectileEnemyCollision(enemy, projectile) {
         if (projectile.active) {
             enemy.setTint(0xff0000)
@@ -181,7 +185,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    // if player collides with enemy: //
+    // Player-Enemy Collision //
     handlePlayerEnemyCollision(player, enemy) {
         player.updateScore(-5);
         this.cameras.main.shake(15, 0.02)
@@ -201,7 +205,7 @@ class GameScene extends Phaser.Scene {
 
     }
 
-    // if player collides with star //
+    // Player-Star Collision //
     collectStar(player, star) {
         star.disableBody(true, true);
 
@@ -214,7 +218,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    // if player collides with health pack //
+    // Player-Health Pack Collision //
     collectHealth(player, heart) {
         heart.disableBody(true, true);
         this.addHealth()
@@ -225,7 +229,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    // creates the dark background for the objectives and pause screen
+    // Dark background for objectives and pause screen //
     createVeil() {
         this.veil = this.add.graphics({x : 0, y: 0});
         this.veil.fillStyle('0x000000', 0.75);
@@ -234,7 +238,7 @@ class GameScene extends Phaser.Scene {
         this.veil.setScrollFactor(0);
     }
 
-    // creates an objectives screen, then 'hides' it
+    // Objectives Screen //
     createObjectivesScreen() {
         this.createVeil();
         this.textObjective = this.add.text(150, 45, 'OBJECTIVES');
@@ -249,17 +253,17 @@ class GameScene extends Phaser.Scene {
         this.EnemyObjective.setDepth(101);
         this.EnemyObjective.setScrollFactor(0);
 
-        this.toggleScreen(false, "objectives");
+        this.toggleScreen(false, "objectives"); //hides
     }
     
-    // creates a pause screen, then 'hides' it
+    // Pause Screen //
     createPauseScreen() {
         this.createVeil()
         this.textPause = this.add.text(175, 45, 'PAUSE');
         this.textPause.setDepth(101);
         this.textPause.setScrollFactor(0);
 
-        this.toggleScreen(false, "pause");
+        this.toggleScreen(false, "pause"); //hides
     }
 
     // displays the 'veil' and then displays either the pause / objectives screen
@@ -286,19 +290,19 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    // is called when the user clicks the objective button / presses q
+    // Shows screen on CRATE BUTTON click OR on key press "Q" //
     clickObjective() {
         this.isObjective = !this.isObjective
         this.toggleScreen(this.isObjective, "objectives");
     }
 
-    // is called when the user clicks the pause button / presses esc
+    // Pause on button press OR on key press "esc" //
     clickPause() {
         this.isPause = !this.isPause
         this.toggleScreen(this.isPause, "pause")
     }
 
-    // class to decrease and increase player's health //
+    // Decrease/increase player health //
     removeHealth() {
         this.player.updateHealth(-1)
         console.log(this.player.health)
@@ -320,48 +324,48 @@ class GameScene extends Phaser.Scene {
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
 
-        // game over if player's health is 0
+        // game over if player's health is 0 //
         if (this.player.health <= 0) {
             //game is over
             this.gameOver()
         }
         
-        // fire projectile on mouse click in mouse direction
+        // fire projectile on mouse click in mouse direction //
         this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png), pointer')
         var pointer = this.input.activePointer;
         if(pointer.leftButtonDown()){
             if (time > this.lastFiredTime) {
-                this.lastFiredTime = time + 200
-                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer)
+                this.lastFiredTime = time + 200 //set delay between projectile fire
+                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer) //call func in "Projectile.js"
             }
         }
+        this.gun.update(time, delta, pointer, this)
 
-        // open objectives menu if player presses q
+        // Open objectives on key press "Q" //
         if(this.keys.q.isDown) {
             if (!this.toggleObjectives && !this.isPause) {
                 this.toggleObjectives = true;
                 this.clickObjective();
             }
         }
-
         if(this.keys.q.isUp) {
             this.toggleObjectives = false;
         }
 
-        // open pause menu if player presses pause
+        // Pause //
         if(this.keys.esc.isDown) {
             if (!this.togglePause && !this.isObjective) {
                 this.togglePause = true;
                 this.clickPause();
             }
         }
-
         if (this.keys.esc.isUp) {
             this.togglePause = false;
         }
 
-        this.player.update()
-        // update enemy group so 5 enemies are always alive 
+        this.player.update(time, delta, pointer)
+
+        // update enemy group so 5 enemies are always alive //
         this.enemies.children.iterate((child) => {
             if(!child.isDead) {
                 child.update()
