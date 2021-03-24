@@ -39,6 +39,7 @@ class GameScene extends Phaser.Scene {
         this.scoreText
         this.toggleObjectives
         this.togglePause
+        this.timerLabel
         this.isPause
         this.isObjective
 
@@ -65,11 +66,12 @@ class GameScene extends Phaser.Scene {
         this.physics.world.bounds.height = map.heightInPixels
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
-        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5); 
-        this.timerLabel.setDepth(101);  
-        this.countdown = new CountdownController(this, this.timerLabel);    
-        this.countdown.start(this.handleCountdownFinsihed.bind(this));  
-        this.timerLabel.setVisible(false)  
+//for timer
+        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5);
+        this.timerLabel.setDepth(101);
+        this.countdown = new CountdownController(this, this.timerLabel);
+        this.countdown.start(this.handleCountdownFinsihed.bind(this)); 
+        this.timerLabel.setVisible(false) 
 
         const debugGraphics = this.add.graphics().setAlpha(0.2)
         worldLayer.renderDebug(debugGraphics, {
@@ -263,10 +265,11 @@ class GameScene extends Phaser.Scene {
     // displays the 'veil' and then displays either the pause / objectives screen
     toggleScreen(isVisible, whichScreen) {
         this.veil.setVisible(isVisible);
-
+        
         // need an if-statement so the objectives page and pause page can't be displayed at the same time
         if (whichScreen == "objectives") {
             this.textObjective.setVisible(isVisible);
+            this.timerLabel.setVisible(isVisible);
 
             // check if player has completed either objective.
             if(this.player.getCoin() >= 5) {
@@ -377,6 +380,8 @@ class GameScene extends Phaser.Scene {
         }
 
         })
+        //timer
+        this.countdown.update();
     } //end update
 
 
