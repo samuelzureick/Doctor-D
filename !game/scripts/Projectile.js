@@ -5,16 +5,24 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         this.y = 200
     }
 
-    fire(x, y, scene, pointer) {
+    // called when the player presses the spacebar
+    fire(x, y, dir) {
+        // displays the projectile
         this.body.reset(x, y)
         this.setActive(true)
         this.setVisible(true)
-        this.setSize(15,3)
-
-        let angle = Phaser.Math.Angle.BetweenPoints(this, pointer)
-        this.rotation = angle
-        scene.physics.velocityFromRotation(angle, 150, this.body.velocity)
-
+        
+        this.dir = dir // dir = direction
+        switch(dir){
+            case 'left':
+                this.setVelocity(-200, 0)
+                this.body.rotation = 180
+                break
+            case 'right':
+                this.setVelocity(200, 0)
+                this.body.rotation = 0
+                break
+        }
     }
 
     recycle() {
@@ -28,7 +36,7 @@ class Projectiles extends Phaser.Physics.Arcade.Group {
     constructor (scene) {
         super(scene.physics.world, scene);
         this.createMultiple({
-            frameQuantity: 100,
+            frameQuantity: 5,
             key: 'bullet',
             active: false,
             visible: false,
@@ -36,10 +44,10 @@ class Projectiles extends Phaser.Physics.Arcade.Group {
         })
     }
 
-    fireProjectile(x, y, scene, pointer) {
+    fireProjectile(x, y, facing) {
         let projectile = this.getFirstDead(false)
         if (projectile) {
-            projectile.fire(x, y, scene, pointer)
+            projectile.fire(x, y, facing)
         }
     }
 }
