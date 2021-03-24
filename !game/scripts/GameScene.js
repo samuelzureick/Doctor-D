@@ -1,5 +1,6 @@
 class GameScene extends Phaser.Scene {
     
+    countdown
     constructor() {
         super('GameScene')
     }
@@ -63,6 +64,12 @@ class GameScene extends Phaser.Scene {
         this.physics.world.bounds.width = map.widthInPixels
         this.physics.world.bounds.height = map.heightInPixels
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+
+        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5); 
+        this.timerLabel.setDepth(101);  
+        this.countdown = new CountdownController(this, this.timerLabel);    
+        this.countdown.start(this.handleCountdownFinsihed.bind(this));  
+        this.timerLabel.setVisible(false)  
 
         const debugGraphics = this.add.graphics().setAlpha(0.2)
         worldLayer.renderDebug(debugGraphics, {
@@ -144,6 +151,9 @@ class GameScene extends Phaser.Scene {
         }
 
     } //end create
+        handleCountdownFinsihed()   
+    {   
+    }   
 
     // if projectile collides with map: //
     handleProjectileWorldCollision(p) {
