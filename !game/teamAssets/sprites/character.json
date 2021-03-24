@@ -192,7 +192,7 @@
         "y": 0.5
       }
     },
-    "Player Character/Idle/Idle_idle_1.png": {
+    "Player Character/Idle/Idle_idle_4.png": {
       "frame": {
         "x": 13,
         "y": 210,
@@ -504,7 +504,7 @@
         "y": 0.5
       }
     },
-    "Player Character/Idle/Idle_idle_3.png": {
+    "Player Character/Idle/Idle_idle_1.png": {
       "frame": {
         "x": 25,
         "y": 222,
@@ -2184,7 +2184,7 @@
         "y": 0.5
       }
     },
-    "Player Character/Idle/Idle_idle_2.png": {
+    "Player Character/Idle/Idle_idle_3.png": {
       "frame": {
         "x": 13,
         "y": 210,
@@ -2208,7 +2208,7 @@
         "y": 0.5
       }
     },
-    "Player Character/Idle/Idle_idle_4.png": {
+    "Player Character/Idle/Idle_idle_2.png": {
       "frame": {
         "x": 25,
         "y": 222,

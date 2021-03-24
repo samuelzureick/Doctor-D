@@ -12,6 +12,7 @@ class GameScene extends Phaser.Scene {
         //load sprite images//
         this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
+        this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
@@ -22,6 +23,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('star', 'assets/star.png');
         this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
 
+
         //////////////////////////////////////////////////////////////////////////
 
         // initialise class variables //
@@ -30,6 +32,7 @@ class GameScene extends Phaser.Scene {
         this.enemy
         this.enemies
         this.gun
+        this.crosshair
         this.projectiles
         this.keys
         this.lastFiredTime = 0
@@ -88,7 +91,8 @@ class GameScene extends Phaser.Scene {
 
         // initialise gun //
         this.gun = new Gun(this, 200, 120, 'gun')
-        //this.gun.startFollow(this.player)
+        // initialise crosshair //
+        this.crosshair = new Crosshair(this, 200, 120, 'crosshair')
 
         // initialise enemies + add collisions //
         this.enemies = this.add.group()
@@ -331,7 +335,7 @@ class GameScene extends Phaser.Scene {
         }
         
         // fire projectile on mouse click in mouse direction //
-        this.input.setDefaultCursor('url(teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png), pointer')
+        this.input.setDefaultCursor('url(teamAssets/blank_cursor.png), pointer') //hides cursor by making it a 1 pixel image
         var pointer = this.input.activePointer;
         if(pointer.leftButtonDown()){
             if (time > this.lastFiredTime) {
@@ -340,6 +344,7 @@ class GameScene extends Phaser.Scene {
             }
         }
         this.gun.update(time, delta, pointer, this)
+        this.crosshair.update(time, delta, pointer)
 
         // Open objectives on key press "Q" //
         if(this.keys.q.isDown) {

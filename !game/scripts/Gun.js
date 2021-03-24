@@ -4,8 +4,10 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         this.x = x
         this.y = y
         this.facing = 'left'
+        this.setDisplaySize(35, 35)
         scene.add.existing(this)
         scene.physics.add.existing(this)
+        
     }
 
     update(time, delta, pointer, scene) {
