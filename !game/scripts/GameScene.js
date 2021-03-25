@@ -378,7 +378,7 @@ class GameScene extends Phaser.Scene {
 
         // reloads guns //
         this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
-        if (Phaser.Input.Keyboard.JustDown(this.keys.r)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keys.r) && !pointer.leftButtonDown()) {
             if (this.gun.ammo < this.gun.mag){
                 this.reloadText.setText("Reloading")
                 this.reloadText.setVisible(true)
