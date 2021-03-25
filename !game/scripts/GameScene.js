@@ -203,7 +203,7 @@ class GameScene extends Phaser.Scene {
                 delay: 15,
                 callback: () => {
                     this.player.updateScore(5);
-                    this.player.addEnemy();
+                    this.player.addEnemy()
                     enemy.explode()
                     projectile.recycle()
                 },
@@ -223,7 +223,6 @@ class GameScene extends Phaser.Scene {
             delay: 500,
             callback: () => {
                 player.clearTint()
-                player.addEnemy()
             },
             callbackScope: this,
             loop: false
@@ -311,7 +310,7 @@ class GameScene extends Phaser.Scene {
             this.CollectObjective.setVisible(isVisible);
             
             // set to 1, for the purpose of testing.
-            if(this.player.getEnemy() >= 1 && this.countdown.getDuration() > 0)  {
+            if(this.player.getEnemy() >= 5 && this.countdown.getDuration() > 0)  {
                 this.countdown.stop()
                 this.timerLabel.setVisible(false);
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
