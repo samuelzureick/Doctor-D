@@ -11,7 +11,7 @@ class Enemy extends Entity {
         anims.create({
             key: 'enemyLeft',
             frames: anims.generateFrameNames(this.textureKey, {
-                prefix: 'skeleton-walk-left/',
+                prefix: 'blob-walk-left/',
                 suffix: '',
                 start: 1,
                 end: 3,
@@ -23,7 +23,7 @@ class Enemy extends Entity {
         anims.create({
             key: 'enemyRight',
             frames: anims.generateFrameNames(this.textureKey, {
-                prefix: 'skeleton-walk-right/',
+                prefix: 'blob-walk-right/',
                 suffix: '',
                 start: 1,
                 end: 3,
@@ -35,7 +35,7 @@ class Enemy extends Entity {
         anims.create({
             key: 'enemyUp',
             frames: anims.generateFrameNames(this.textureKey, {
-                prefix: 'skeleton-walk-up/',
+                prefix: 'blob-walk-up/',
                 suffix: '',
                 start: 1,
                 end: 3,
@@ -47,7 +47,7 @@ class Enemy extends Entity {
         anims.create({
             key: 'enemyDown',
             frames: anims.generateFrameNames(this.textureKey, {
-                prefix: 'skeleton-walk-down/',
+                prefix: 'blob-walk-down/',
                 suffix: '',
                 start: 1,
                 end: 3,
