@@ -3,6 +3,7 @@ class Crosshair extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'crosshair')
         this.x = x
         this.y = y
+        this.setDepth(10)
         this.setScale(0.5, 0.5)
         scene.add.existing(this)
         scene.physics.add.existing(this)
