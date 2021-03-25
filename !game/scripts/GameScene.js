@@ -373,10 +373,8 @@ class GameScene extends Phaser.Scene {
         this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
         if (Phaser.Input.Keyboard.JustDown(this.keys.r)) {
             if (this.gun.ammo < this.gun.mag){
-                if (!pointer.leftButtonDown()){
-                    this.reloadText.setVisible(true)
-                    this.time.delayedCall(1000, this.reloadFunc, [this], this)
-                }
+                this.reloadText.setVisible(true)
+                this.time.delayedCall(1000, this.reloadFunc, [this], this)
             }
         }
         
