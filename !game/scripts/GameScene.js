@@ -162,6 +162,7 @@ class GameScene extends Phaser.Scene {
 
         // Create collision methods //
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
+        this.physics.add.collider(this.enemies)
         this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
@@ -420,7 +421,7 @@ class GameScene extends Phaser.Scene {
         // update enemy group so 5 enemies are always alive //
         this.enemies.children.iterate((child) => {
             if(!child.isDead) {
-                child.update()
+                child.update(this)
                 if (!this.enemies.isFull()){
                     const e = new Enemy(this, 220, 250, 'enemy')
                     e.body.setCollideWorldBounds(true)
