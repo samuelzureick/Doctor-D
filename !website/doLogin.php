@@ -12,12 +12,6 @@
 
 		$un = $_POST['username'];
 		$pw = $_POST['password'];
-		if ($_POST['create_password'] == $_POST['pwc'])
-		{
-			$pwc = $_POST['pwc'];
-			$pw_hash = password_hash($pwc, PASSWORD_DEFAULT);
-		}
-		
 		
 
 		
