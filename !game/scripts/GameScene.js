@@ -19,7 +19,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
         var frameNames = this.textures.get('characters').getFrameNames()
-        this.load.atlas('enemy', 'teamAssets/sprites/skeleton.png', 'teamAssets/sprites/skeleton.json')
+        this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
         this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
 
