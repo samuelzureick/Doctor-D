@@ -106,7 +106,7 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.enemies, worldLayer)
 
         // Create Score Text //
-        this.scoreText = this.add.text(275, 6, 'Score: 0')
+        this.scoreText = this.add.text(310, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
@@ -353,6 +353,7 @@ class GameScene extends Phaser.Scene {
     // general update class, ran with each game 'tick' //
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
+        this.scoreText.setX(310 - (this.player.score.toString().length * 8))
         this.ammoText.setText('Ammo: ' + this.gun.ammo);
 
         // game over if player's health is 0 //
