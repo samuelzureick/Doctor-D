@@ -20,6 +20,7 @@ class CountdownController
 	{
 		this.scene = scene
 		this.label = label
+        this.active = true 
 	}
 
 	/**
@@ -28,6 +29,7 @@ class CountdownController
 	 */
 	start(callback, duration = 45000)
 	{
+        this.active = true
 		this.stop()
 
 		this.finishedCallback = callback
@@ -61,6 +63,8 @@ class CountdownController
 	{
 		if (!this.timerEvent || this.duration <= 0)
 		{
+            this.active = false 
+            this.timerEvent
 			return
 		}
 
@@ -70,4 +74,17 @@ class CountdownController
 
 		this.label.text = seconds.toFixed(2)
 	}
+
+    getDuration()
+    {
+        if (this.active == false) {
+            return 0
+        } else {
+            const elapsed = this.timerEvent.getElapsed()
+            const remaining = this.duration - elapsed
+            const seconds = remaining / 1000
+
+            return seconds 
+        }
+    }
 }

@@ -71,11 +71,11 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         // for timer //
-        this.timerLabel = this.add.text(100, 50 , '45').setOrigin(0.5);
+        this.timerLabel = this.add.text(340, 137, '45').setOrigin(0.5);
         this.timerLabel.setDepth(101);
         this.countdown = new CountdownController(this, this.timerLabel);
-        this.countdown.start(this.handleCountdownFinsihed.bind(this)); 
-        this.timerLabel.setVisible(false) 
+        this.countdown.start(this.handleCountdownFinished.bind(this)); 
+        this.timerLabel.setVisible(false)
 
         const debugGraphics = this.add.graphics().setAlpha(0.2)
         worldLayer.renderDebug(debugGraphics, {
@@ -176,9 +176,11 @@ class GameScene extends Phaser.Scene {
         }
 
     } //end create
-        handleCountdownFinsihed()   
-    {   
-    }   
+
+    handleCountdownFinished()
+    {
+        this.player.active = false
+    }
 
     // Func for delayed reload // 
     reloadFunc() {
@@ -198,7 +200,7 @@ class GameScene extends Phaser.Scene {
         if (projectile.active) {
             enemy.setTint(0xff0000)
             this.time.addEvent({
-                delay: 30,
+                delay: 15,
                 callback: () => {
                     this.player.updateScore(5);
                     this.player.addEnemy();
@@ -270,11 +272,11 @@ class GameScene extends Phaser.Scene {
         this.textObjective.setDepth(101);
         this.textObjective.setScrollFactor(0);
 
-        this.CollectObjective = this.add.text(100, 100, 'Collect 5 Stars');
+        this.CollectObjective = this.add.text(75, 100, 'Collect 5 Stars');
         this.CollectObjective.setDepth(101);
         this.CollectObjective.setScrollFactor(0);
 
-        this.EnemyObjective = this.add.text(100, 130, 'Eliminate 5 Enemies');
+        this.EnemyObjective = this.add.text(75, 130, 'Eliminate 5 Enemies in: ');
         this.EnemyObjective.setDepth(101);
         this.EnemyObjective.setScrollFactor(0);
 
@@ -298,7 +300,9 @@ class GameScene extends Phaser.Scene {
         // need an if-statement so the objectives page and pause page can't be displayed at the same time
         if (whichScreen == "objectives") {
             this.textObjective.setVisible(isVisible);
-            this.timerLabel.setVisible(isVisible);
+            if (this.countdown.active == true) {
+                this.timerLabel.setVisible(isVisible);
+            }
 
             // check if player has completed either objective.
             if(this.player.getCoin() >= 5) {
@@ -306,7 +310,10 @@ class GameScene extends Phaser.Scene {
             }
             this.CollectObjective.setVisible(isVisible);
             
-            if(this.player.getEnemy() >= 5) {
+            // set to 1, for the purpose of testing.
+            if(this.player.getEnemy() >= 1 && this.countdown.getDuration() > 0)  {
+                this.countdown.stop()
+                this.timerLabel.setVisible(false);
                 this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
             }
             this.EnemyObjective.setVisible(isVisible);
@@ -330,7 +337,6 @@ class GameScene extends Phaser.Scene {
     // Decrease/increase player health //
     removeHealth() {
         this.player.updateHealth(-1)
-        console.log(this.player.health)
         this.heart_arr[this.player.health].visible = false
     }
 
