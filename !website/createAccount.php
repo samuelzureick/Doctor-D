@@ -1,5 +1,4 @@
-<?php
-$main = "<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang='en'>
 <head>
   <meta charset='utf-8'>
@@ -7,11 +6,11 @@ $main = "<!DOCTYPE html>
   <title>Create Account</title>
   <link rel='stylesheet' type='text/css' href='webSiteStyleSheet.css'>
 </head>
-<body>
+<body onload='warning()'>
   <div class='createAccFillerSpace'>
-      <div class='bounceCreateAccount'></div>
+    <div class='bounceCreateAccount'></div>
   </div>
-
+  
 
   <div class='cloud'></div>
   <div class='cloud1'></div>
@@ -21,39 +20,35 @@ $main = "<!DOCTYPE html>
   <div class='username'>
     <div class='usernamePic'></div>
     <div class='usernameForm'>
-      <form action='doRegister.php' method='post'>
-        <input type='text' id='create_username' name='username'>
-        </form>
+      <form method='POST' action='doRegister.php'>
+        <input type='text' id='username' name='username'>
     </div>
   </div>
 
   <div class='password'>
     <div class='passwordPic'></div>
     <div class='passwordForm'>
-    <form action='doRegister.php' method='post'>
         <input type='password' id='create_password' name='create_password'><br>
-       </form>
-      
     </div>
   </div>
 
     <div class='confirmPassword'>
       <div class='confirmPasswordPic'></div>
       <div class='confirmPasswordForm'>
-        <form action='doRegister.php' method='post'>
-          <input type='password' id='confirm_password' name='confirm_password'><br>
-        </form>
+          <input type='password' id='pwc' name='pwc'><br>
+        
       </div>
     </div>
 
   <div class='confirmAndCancel'>
     
     <div class='confirmParent'>
-      <button class='confirmButton' type='submit' formmethod='post'></button>
+      <button class='confirmButton' type='submit'></button>
+      </form>
     </div>
 
     <div class='cancelParent'>
-      <button class='cancelButton'></button>
+      <button class='cancelButton' onclick="location.href='Menu.html';"></button>
     </div>
 
   </div>
@@ -62,8 +57,9 @@ $main = "<!DOCTYPE html>
     </div>
   </div>
 </body>
-</html>";
-
-echo $main;
-
-?>
+<script>
+  function warning(){
+  alert("-------WARNING-------\nPLEASE DO NOT ENTER ANY SENSITIVE PASSWORDS OR OTHER INFORMATION AT THIS POINT\nCURRENTLY THERE IS NO SECURE PASSWORD STORAGE AND WE ARE VULNERABLE TO SQL INJECTIONS");
+}
+  </script>
+</html>

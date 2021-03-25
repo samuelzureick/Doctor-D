@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php 
+	require('connection.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,17 +9,32 @@
 <body>
 	<h1 title="hello">Thank You</h1>
 	<hr>
-	<p>Restritation Complete</p>
+	<p></p>
 
 	<?php
+
 		$un = $_POST['username'];
-		$pw = $_POST['confirm_password'];
+		if ($_POST['create_password'] == $_POST['pwc'])
+		{
+			$pwc = $_POST['pwc'];
+			$pw_hash = password_hash($pwc, PASSWORD_DEFAULT);
+		}
+		
+		$pw = $_POST['pwc'];
 
-		echo("<p>$un</p>");
-		echo("<p>$pw</p>");
+		$_SESSION['username'] = $un;
 
-		$_SESSION['create_username'] = $un;
-		$_SESSION['confirm_password'] = $pw;
+		$sql = "INSERT INTO users (username, password) VALUES ('$un', '$pw')";
+
+		if ($conn->query($sql))
+		{
+		}
+		else
+		{
+			echo("ERROR: " .$conn->error);
+		}
+		
+		
 	?>
 
 	<a href="login.php">Login</a>

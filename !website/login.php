@@ -1,6 +1,4 @@
-<?php
 
-$main = "
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -23,7 +21,7 @@ $main = "
 	<div class='username'>
 		<div class='usernamePic'></div>
 		<div class='usernameForm'>
-			<form>
+			<form method='post' action='doLogin.php'>
 				<input type='text' id='username' name='username'>
 			
 		</div>
@@ -33,27 +31,25 @@ $main = "
 		<div class='passwordPic'></div>
 		<div class='passwordForm'>
 			
-				<input type='text' id='password' name='password'><br>
-			</form>
+				<input type='password' id='password' name='password'><br>
+			
 		</div>
 	</div>
 
 	<div class='logIn'>
-		<button class='LogInButton' type='submit'></button>
+		<button class='LogInButton' type='submit'></button></form>
 	</div>
 
 	<div class='accAndGuestParent'>
 
 		<div class='createAccParent'>
-			<button class='createAccountButton'></button>
+			<button class='createAccountButton' onclick="location.href='createAccount.php';"></button>
 		</div>
 
 		<div class='guestPlayParent'>
-			<button class='guestPlayButton'></button>
+			<button class='guestPlayButton' onclick="location.href='https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!game/';"></button>
 		</div>
 
 	</div>
 </body>
-</html>";
-
-?>
+</html>
