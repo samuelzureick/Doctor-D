@@ -1,5 +1,5 @@
 class Gun extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, mag) {
         super(scene, x, y, 'gun')
         this.x = x
         this.y = y
@@ -8,6 +8,18 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this)
         scene.physics.add.existing(this)
         
+        this.mag = mag
+        this.ammo = mag
+        
+    }
+
+    reload(){
+        this.ammo = this.mag
+        console.log(this.ammo)
+    }
+
+    shoot(){
+        this.ammo -= 1
     }
 
     update(time, delta, pointer, scene) {

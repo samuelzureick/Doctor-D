@@ -34,11 +34,11 @@ class GameScene extends Phaser.Scene {
         this.gun
         this.crosshair
         this.projectiles
-        this.keys
         this.lastFiredTime = 0
         this.stars
         this.health_pickups
         this.scoreText
+        this.ammoText
         this.toggleObjectives
         this.togglePause
         this.timerLabel
@@ -90,7 +90,7 @@ class GameScene extends Phaser.Scene {
         this.player.body.setCollideWorldBounds(true)
 
         // initialise gun //
-        this.gun = new Gun(this, 200, 120, 'gun')
+        this.gun = new Gun(this, 200, 120, 6, 'gun')
         // initialise crosshair //
         this.crosshair = new Crosshair(this, 200, 120, 'crosshair')
 
@@ -105,10 +105,22 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.enemies, worldLayer)
 
         // Create Score Text //
-        this.scoreText = this.add.text(275, 6, 'Score: 0')
+        this.scoreText = this.add.text(305, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
+
+        // Create Ammo Text //
+        this.ammoText = this.add.text(315, 286, 'Ammo: ' + this.gun.ammo)
+        this.ammoText.setFontSize('15px')
+        this.ammoText.setColor('#FFFFFF')
+        this.ammoText.setBackgroundColor('#000000')
+
+        // Reload Text //
+        this.reloadText = this.add.text(275, 286, 'Reloading', { fontFamily: 'Oswald, sans-serif'})
+        this.reloadText.setFontSize('7px')
+        this.reloadText.setColor('#d40000')
+        this.reloadText.setVisible(false)
 
         ///// Collectible Items /////
         // Coins //
@@ -136,12 +148,14 @@ class GameScene extends Phaser.Scene {
 
         // Add keys for inputs + projectiles //
         const {Q} = Phaser.Input.Keyboard.KeyCodes
+        const {R} = Phaser.Input.Keyboard.KeyCodes
         this.keys = this.input.keyboard.addKeys({
             space: 'SPACE',
             plus: 'PLUS',
             minus: 'MINUS',
             esc: 'ESC',
-            q: Q
+            q: Q,
+            r: R
         })
         this.projectiles = new Projectiles(this)
 
@@ -164,6 +178,12 @@ class GameScene extends Phaser.Scene {
         handleCountdownFinsihed()   
     {   
     }   
+
+    // Func for delayed reload // 
+    reloadFunc(scene) {
+        scene.gun.reload();
+        scene.reloadText.setVisible(false);
+    }
 
     // Projectile-Map Collision //
     handleProjectileWorldCollision(p) {
@@ -194,6 +214,7 @@ class GameScene extends Phaser.Scene {
         player.updateScore(-5);
         this.cameras.main.shake(15, 0.02)
         player.setTint(0xff0000)
+
         this.time.addEvent({
             delay: 500,
             callback: () => {
@@ -204,9 +225,7 @@ class GameScene extends Phaser.Scene {
             loop: false
         })
         enemy.explode()
-
         this.removeHealth()
-
     }
 
     // Player-Star Collision //
@@ -327,6 +346,7 @@ class GameScene extends Phaser.Scene {
     // general update class, ran with each game 'tick' //
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
+        this.ammoText.setText('Ammo: ' + this.gun.ammo);
 
         // game over if player's health is 0 //
         if (this.player.health <= 0) {
@@ -338,16 +358,29 @@ class GameScene extends Phaser.Scene {
         this.input.setDefaultCursor('url(teamAssets/blank_cursor.png), pointer') //hides cursor by making it a 1 pixel image
         var pointer = this.input.activePointer;
         if(pointer.leftButtonDown()){
-            if (time > this.lastFiredTime) {
-                this.lastFiredTime = time + 200 //set delay between projectile fire
-                this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer) //call func in "Projectile.js"
+            if (this.gun.ammo > 0) {
+                if (time > this.lastFiredTime) {
+                    this.lastFiredTime = time + 200 //set delay between projectile fire
+                    this.gun.shoot()
+                    this.projectiles.fireProjectile(this.player.x, this.player.y, this, pointer) //call func in "Projectile.js"
+                }
             }
         }
         this.gun.update(time, delta, pointer, this)
         this.crosshair.update(time, delta, pointer)
 
+        // reloads guns //
+        this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
+        if (Phaser.Input.Keyboard.JustDown(this.keys.r)) {
+            if (this.gun.ammo < this.gun.mag){
+                this.reloadText.setVisible(true)
+                this.time.delayedCall(1000, this.reloadFunc, [this], this)
+            }
+        }
+        
+
         // Open objectives on key press "Q" //
-        if(this.keys.q.isDown) {
+        if (this.keys.q.isDown) {
             if (!this.toggleObjectives && !this.isPause) {
                 this.toggleObjectives = true;
                 this.clickObjective();
