@@ -35,6 +35,7 @@ class GameScene extends Phaser.Scene {
         this.crosshair
         this.projectiles
         this.lastFiredTime = 0
+        this.reloadStatus = false
         this.stars
         this.health_pickups
         this.scoreText
@@ -180,9 +181,10 @@ class GameScene extends Phaser.Scene {
     }   
 
     // Func for delayed reload // 
-    reloadFunc(scene) {
-        scene.gun.reload();
-        scene.reloadText.setVisible(false);
+    reloadFunc() {
+        this.gun.reload();
+        this.reloadText.setVisible(false);
+        this.reloadStatus = false
     }
 
     // Projectile-Map Collision //
@@ -373,11 +375,17 @@ class GameScene extends Phaser.Scene {
         this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
         if (Phaser.Input.Keyboard.JustDown(this.keys.r)) {
             if (this.gun.ammo < this.gun.mag){
+                this.reloadText.setText("Reloading")
                 this.reloadText.setVisible(true)
-                this.time.delayedCall(1000, this.reloadFunc, [this], this)
+                this.reloadStatus = true
+                this.time.delayedCall(1000, this.reloadFunc, [], this)
             }
         }
-        
+
+        if (this.gun.ammo == 0 && !this.reloadStatus) {
+            this.reloadText.setText("No Ammo")
+            this.reloadText.setVisible(true)
+        }
 
         // Open objectives on key press "Q" //
         if (this.keys.q.isDown) {
