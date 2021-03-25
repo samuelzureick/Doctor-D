@@ -365,7 +365,7 @@ class GameScene extends Phaser.Scene {
         // fire projectile on mouse click in mouse direction //
         this.input.setDefaultCursor('url(teamAssets/blank_cursor.png), pointer') //hides cursor by making it a 1 pixel image
         var pointer = this.input.activePointer;
-        if(pointer.leftButtonDown()){
+        if(pointer.leftButtonDown() && !this.reloadStatus){
             if (this.gun.ammo > 0) {
                 if (time > this.lastFiredTime) {
                     this.lastFiredTime = time + 200 //set delay between projectile fire
