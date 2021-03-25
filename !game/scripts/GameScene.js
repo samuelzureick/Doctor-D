@@ -35,7 +35,6 @@ class GameScene extends Phaser.Scene {
         this.crosshair
         this.projectiles
         this.lastFiredTime = 0
-        this.lastReloadTime = 0
         this.stars
         this.health_pickups
         this.scoreText
@@ -106,17 +105,22 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.enemies, worldLayer)
 
         // Create Score Text //
-        this.scoreText = this.add.text(275, 6, 'Score: 0')
+        this.scoreText = this.add.text(305, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
 
         // Create Ammo Text //
-        this.ammoText = this.add.text(275, 286, 'Ammo: ' + this.gun.ammo)
+        this.ammoText = this.add.text(315, 286, 'Ammo: ' + this.gun.ammo)
         this.ammoText.setFontSize('15px')
         this.ammoText.setColor('#FFFFFF')
         this.ammoText.setBackgroundColor('#000000')
 
+        // Reload Text //
+        this.reloadText = this.add.text(275, 286, 'Reloading', { fontFamily: 'Oswald, sans-serif'})
+        this.reloadText.setFontSize('7px')
+        this.reloadText.setColor('#d40000')
+        this.reloadText.setVisible(false)
 
         ///// Collectible Items /////
         // Coins //
@@ -174,6 +178,12 @@ class GameScene extends Phaser.Scene {
         handleCountdownFinsihed()   
     {   
     }   
+
+    // Func for delayed reload // 
+    reloadFunc(scene) {
+        scene.gun.reload();
+        scene.reloadText.setVisible(false);
+    }
 
     // Projectile-Map Collision //
     handleProjectileWorldCollision(p) {
@@ -360,14 +370,16 @@ class GameScene extends Phaser.Scene {
         this.crosshair.update(time, delta, pointer)
 
         // reloads guns //
+        this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
         if (Phaser.Input.Keyboard.JustDown(this.keys.r)) {
-            if (!pointer.leftButtonDown()){
-                if (time > this.lastReloadTime) {
-                    this.lastReloadTime = time + 1000
-                    this.gun.reload()
+            if (this.gun.ammo < this.gun.mag){
+                if (!pointer.leftButtonDown()){
+                    this.reloadText.setVisible(true)
+                    this.time.delayedCall(1000, this.reloadFunc, [this], this)
                 }
             }
         }
+        
 
         // Open objectives on key press "Q" //
         if (this.keys.q.isDown) {
