@@ -14,7 +14,8 @@ class GameScene extends Phaser.Scene {
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
         this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
-        this.load.tilemapTiledJSON('map', 'scripts/mappp.json')
+        this.load.tilemapTiledJSON('room0', 'scripts/room0.json')
+        this.load.tilemapTiledJSON('room1', 'scripts/room1.json')
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
@@ -48,27 +49,35 @@ class GameScene extends Phaser.Scene {
 
     } // end preload
 
-    create() {    
-        
-        // create tilemap //
-        const map = this.make.tilemap({
-            key: 'map'
-        })
+    create(data) {
+        console.log(data)
+        if (Object.getOwnPropertyNames(data).length > 0) {
+            this.map = this.make.tilemap({
+                key: data
+            })
+            this.registry.list.load = this.registry.list.load ^ 1
+        } else {
+            // create tilemap //
+            this.registry.set('load', 0)
+            this.map = this.make.tilemap({
+                key: 'room0'
+            })
+
+        }
 
         // setting up tilemap, layers and collisions //
-        const tileset = map.addTilesetImage('purple', 'tiles')
-        const belowLayer = map.createStaticLayer('below player', tileset, 0, 0)
-        const worldLayer = map.createStaticLayer('world', tileset, 0, 0)
-        const aboveLayer = map.createStaticLayer('above player', tileset, 0, 0)
-        aboveLayer.setDepth(100)
+        const tileset = this.map.addTilesetImage('tileset', 'tiles')
+        const belowLayer = this.map.createStaticLayer('below player', tileset, 0, 0)
+        const worldLayer = this.map.createStaticLayer('world', tileset, 0, 0)
+        console.log(this.registry.list.load)
 
         worldLayer.setCollisionByProperty({
             collides: true
         })
 
-        this.physics.world.bounds.width = map.widthInPixels
-        this.physics.world.bounds.height = map.heightInPixels
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        this.physics.world.bounds.width = this.map.widthInPixels
+        this.physics.world.bounds.height = this.map.heightInPixels
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)   
 
         // for timer //
         this.timerLabel = this.add.text(340, 137, '45').setOrigin(0.5);
@@ -86,7 +95,7 @@ class GameScene extends Phaser.Scene {
         
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
-        this.physics.add.collider(this.player, worldLayer)
+        this.physics.add.collider(this.player, worldLayer, this.testForDoor, null, this)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
 
@@ -176,8 +185,18 @@ class GameScene extends Phaser.Scene {
             this.heart_arr.push(heart);
         }
 
+        console.log(this.cameras.main)
+
     } //end create
 
+    testForDoor(player, world) {
+        //get properties of world collision
+        let data = world.properties
+        if (data.door) {
+            this.scene.restart('room' + (this.registry.list.load ^ 1))
+        }
+    }
+    
     handleCountdownFinished()
     {
         this.player.active = false
