@@ -86,12 +86,12 @@ class GameScene extends Phaser.Scene {
         this.countdown.start(this.handleCountdownFinished.bind(this)); 
         this.timerLabel.setVisible(false)
 
-        const debugGraphics = this.add.graphics().setAlpha(0.2)
-        worldLayer.renderDebug(debugGraphics, {
-            tileColor: null,
-            collidingTileColor: new Phaser.Display.Color(0, 0, 255),
-            faceColor: new Phaser.Display.Color(0, 255, 0, 255)
-        })
+        // const debugGraphics = this.add.graphics().setAlpha(0.2)
+        // worldLayer.renderDebug(debugGraphics, {
+        //     tileColor: null,
+        //     collidingTileColor: new Phaser.Display.Color(0, 0, 255),
+        //     faceColor: new Phaser.Display.Color(0, 255, 0, 255)
+        // })
         
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
