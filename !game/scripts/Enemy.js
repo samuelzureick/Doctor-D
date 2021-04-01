@@ -7,6 +7,7 @@ class Enemy extends Entity {
         const animFrameRate = 4
         this.textureKey = textureKey
         this.speed = 48
+        this.health = 2
 
         anims.create({
             key: 'enemyLeft',
@@ -141,4 +142,8 @@ class Enemy extends Entity {
             }
         }
     }//end update
+
+    removeHealth() {
+        this.health--
+    }
 }

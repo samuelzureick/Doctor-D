@@ -236,27 +236,33 @@ class GameScene extends Phaser.Scene {
     // Projectile-Enemy Collision //
     handleProjectileEnemyCollision(enemy, projectile) {
         if (projectile.active) {
+            projectile.recycle()
+            enemy.removeHealth()
             enemy.setTint(0xff0000)
-            //get x and y coords
-            var coords = enemy.getCenter()
-            var x = coords.x
-            var y = coords.y
+            setTimeout(()=>{enemy.clearTint()}, 75)
             
-            let coin = new Coin(this, Math.round(x), Math.round(y), 'coin0')
-            coin.update()
-            this.coins.add(coin)
-            
-            this.time.addEvent({
-                delay: 15,
-                callback: () => {
-                    this.player.updateScore(5);
-                    this.player.addEnemy()
-                    enemy.explode()
-                    projectile.recycle()
-                },
-                callbackScope: this,
-                loop: false
-            })
+            if (enemy.health <= 0){
+                //get x and y coords
+                var coords = enemy.getCenter()
+                var x = coords.x
+                var y = coords.y
+                
+                let coin = new Coin(this, Math.round(x), Math.round(y), 'coin0')
+                coin.update()
+                this.coins.add(coin)
+                
+                this.time.addEvent({
+                    delay: 15,
+                    callback: () => {
+                        this.player.updateScore(5);
+                        this.player.addEnemy()
+                        enemy.explode()
+                        projectile.recycle()
+                    },
+                    callbackScope: this,
+                    loop: false
+                })
+            } 
         }
     }
 
