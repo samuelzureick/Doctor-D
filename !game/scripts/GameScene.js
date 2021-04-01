@@ -24,6 +24,16 @@ class GameScene extends Phaser.Scene {
         this.load.image('star', 'assets/star.png');
         this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
 
+        this.load.image('coin0', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_0.png')
+        this.load.image('coin1', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_1.png')
+        this.load.image('coin2', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_2.png')
+        this.load.image('coin3', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_3.png')
+        this.load.image('coin4', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_4.png')
+        this.load.image('coin5', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_5.png')
+        this.load.image('coin6', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_6.png')
+        this.load.image('coin7', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_7.png')
+        this.load.image('coin8', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_8.png')
+
 
         //////////////////////////////////////////////////////////////////////////
 
@@ -139,7 +149,6 @@ class GameScene extends Phaser.Scene {
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
-
         // Health Packs //
         this.health_pickups = this.physics.add.group({
             key: 'health',
