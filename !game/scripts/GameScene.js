@@ -149,6 +149,9 @@ class GameScene extends Phaser.Scene {
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
+
+        this.coins = this.physics.add.group()
+
         // Health Packs //
         this.health_pickups = this.physics.add.group({
             key: 'health',
@@ -181,6 +184,7 @@ class GameScene extends Phaser.Scene {
         // Create collision methods //
         this.physics.add.collider(this.projectiles, worldLayer, this.handleProjectileWorldCollision, null, this)
         this.physics.add.collider(this.enemies)
+        this.physics.add.overlap(this.player, this.coins, this.addCoin, null, this)
         this.physics.add.overlap(this.projectiles, this.enemies, this.handleProjectileEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this)
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this)
@@ -198,6 +202,11 @@ class GameScene extends Phaser.Scene {
 
     } //end create
 
+    addCoin(player, coin) {
+        this.coins.remove(coin, true, true)
+        this.player.updateScore(5)
+    }
+    
     testForDoor(player, world) {
         //get properties of world collision
         let data = world.properties
@@ -234,8 +243,9 @@ class GameScene extends Phaser.Scene {
             var y = coords.y
             
             let coin = new Coin(this, Math.round(x), Math.round(y), 'coin0')
-            this.physics.add.existing(coin)
             coin.update()
+            this.coins.add(coin)
+            
             this.time.addEvent({
                 delay: 15,
                 callback: () => {
