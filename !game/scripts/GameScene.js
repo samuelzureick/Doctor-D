@@ -228,6 +228,14 @@ class GameScene extends Phaser.Scene {
     handleProjectileEnemyCollision(enemy, projectile) {
         if (projectile.active) {
             enemy.setTint(0xff0000)
+            //get x and y coords
+            var coords = enemy.getCenter()
+            var x = coords.x
+            var y = coords.y
+            
+            let coin = new Coin(this, Math.round(x), Math.round(y), 'coin0')
+            this.physics.add.existing(coin)
+            coin.update()
             this.time.addEvent({
                 delay: 15,
                 callback: () => {
