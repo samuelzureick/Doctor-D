@@ -22,12 +22,11 @@ class GameScene extends Phaser.Scene {
         var frameNames = this.textures.get('characters').getFrameNames()
         this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
-        this.load.image('crateButton', 'teamAssets/Update 1.4/Destructible Items/Crate/crate_Destroy Crate_00.png')
 
 
         //////////////////////////////////////////////////////////////////////////
 
-        // initialise class variables //
+        // initialise class variables //    
         this.player
         this.keys
         this.enemy
@@ -41,11 +40,13 @@ class GameScene extends Phaser.Scene {
         this.health_pickups
         this.scoreText
         this.ammoText
+        this.veilVisible
         this.toggleObjectives
         this.togglePause
         this.timerLabel
         this.isPause
         this.isObjective
+        this.gameOver = false
 
     } // end preload
 
@@ -132,6 +133,13 @@ class GameScene extends Phaser.Scene {
         this.reloadText.setColor('#d40000')
         this.reloadText.setVisible(false)
 
+        // Game Over Text //
+        this.gameOverText = this.add.text(135, 90, 'GAME OVER')
+        this.gameOverText.setFontSize('25px')
+        this.gameOverText.setColor('#FFFFFF')
+        this.gameOverText.setDepth(101);
+        this.gameOverText.setVisible(false)
+
         ///// Collectible Items /////
         // Coins //
         this.stars = this.physics.add.group({
@@ -151,10 +159,6 @@ class GameScene extends Phaser.Scene {
         // Initialise Objectives and Pause Screen //
         this.createObjectivesScreen();
         this.createPauseScreen();
-
-        // Draw Objective Button //
-        this.add.image(15, 40, 'crateButton').setInteractive();
-        this.input.on('gameobjectup', this.clickObjective, this);
 
         // Add keys for inputs + projectiles //
         const {Q} = Phaser.Input.Keyboard.KeyCodes
@@ -282,6 +286,7 @@ class GameScene extends Phaser.Scene {
         this.veil.fillRect(0, 0, 400, 320);
         this.veil.setDepth(100);
         this.veil.setScrollFactor(0);
+        this.veilVisible = true;
     }
 
     // Objectives Screen //
@@ -341,12 +346,6 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    // Shows screen on CRATE BUTTON click OR on key press "Q" //
-    clickObjective() {
-        this.isObjective = !this.isObjective
-        this.toggleScreen(this.isObjective, "objectives");
-    }
-
     // Pause on button press OR on key press "esc" //
     clickPause() {
         this.isPause = !this.isPause
@@ -364,11 +363,11 @@ class GameScene extends Phaser.Scene {
         this.heart_arr[this.player.health-1].visible = true
     }
 
-    // if player's health = 0 //
-    gameOver() {
-        console.log("GAME OVER - FINAL SCORE: ", this.player.score);
-        //this.scene.start('LoseScene')  use this to change to lose scene on game over
-    }
+//    // if player's health = 0 //
+//    gameOver() {
+//        console.log("GAME OVER - FINAL SCORE: ", this.player.score);
+//        //this.scene.start('LoseScene')  use this to change to lose scene on game over
+//    }
  
     // general update class, ran with each game 'tick' //
     update(time, delta) {
@@ -379,7 +378,7 @@ class GameScene extends Phaser.Scene {
         // game over if player's health is 0 //
         if (this.player.health <= 0) {
             //game is over
-            this.gameOver()
+            this.gameOver = true
         }
         
         // fire projectile on mouse click in mouse direction //
@@ -417,7 +416,8 @@ class GameScene extends Phaser.Scene {
         if (this.keys.q.isDown) {
             if (!this.toggleObjectives && !this.isPause) {
                 this.toggleObjectives = true;
-                this.clickObjective();
+                this.isObjective = !this.isObjective
+                this.toggleScreen(this.isObjective, "objectives");
             }
         }
         if(this.keys.q.isUp) {
@@ -456,6 +456,16 @@ class GameScene extends Phaser.Scene {
         }
 
         })
+
+        if (this.gameOver) {
+            this.veil.setVisible(true);
+            this.physics.pause()
+            this.anims.pauseAll()
+            this.player.setTint(0xff0000);
+            this.gameOverText.setVisible(true)
+        }
+
+
         //timer
         this.countdown.update();
     } //end update
