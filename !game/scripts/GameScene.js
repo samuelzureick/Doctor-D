@@ -105,12 +105,14 @@ class GameScene extends Phaser.Scene {
         
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
+        this.player.setDepth(1);
         this.physics.add.collider(this.player, worldLayer, this.testForDoor, null, this)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
 
         // initialise gun //
         this.gun = new Gun(this, 200, 120, 6, 'gun')
+        this.gun.setDepth(1);
         // initialise crosshair //
         this.crosshair = new Crosshair(this, 200, 120, 'crosshair')
 
@@ -120,6 +122,7 @@ class GameScene extends Phaser.Scene {
         for (let i = 0; i < this.enemies.maxSize; i++) {
             const e = new Enemy(this, 220 + 20*i, 250, 'enemy')
             e.body.setCollideWorldBounds(true)
+            e.setDepth(1);
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
@@ -149,6 +152,27 @@ class GameScene extends Phaser.Scene {
         this.gameOverText.setDepth(101);
         this.gameOverText.setVisible(false)
 
+        // Restart Game //
+        this.restartButton = this.add.text(90, 140, 'Restart', { fill: '#FFFFFF'});
+        this.restartButton.setBackgroundColor('#000000')
+        this.restartButton.setPadding(5, 5, 5, 5)
+        this.restartButton.setDepth(101);  
+        this.restartButton.setInteractive();
+        this.restartButton.on('pointerdown', () => this.restartGame());
+        this.restartButton.setVisible(false)
+
+
+        // Return to Menu Button //
+        this.menuButton = this.add.text(230, 140, 'Main Menu', { fill: '#FFFFFF'});
+        this.menuButton.setBackgroundColor('#000000')
+        this.menuButton.setPadding(5, 5, 5, 5)
+        this.menuButton.setDepth(101);  
+        this.menuButton.setInteractive();
+        this.menuButton.on('pointerdown', () => this.mainMenu());
+        this.menuButton.setVisible(false)
+
+
+
         ///// Collectible Items /////
         // Coins //
         this.stars = this.physics.add.group({
@@ -156,8 +180,9 @@ class GameScene extends Phaser.Scene {
             repeat: 5,
             setXY: {x: 100, y: 200, stepX: 25}
         });
-
+        this.stars.setDepth(1);
         this.coins = this.physics.add.group()
+        this.coins.setDepth(1);
 
         // Health Packs //
         this.health_pickups = this.physics.add.group({
@@ -166,6 +191,7 @@ class GameScene extends Phaser.Scene {
             repeat: 2,
             setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
         })
+        this.health_pickups.setDepth(1);
 
         // Initialise Pause Screen //
         this.createPauseScreen();
@@ -330,7 +356,8 @@ class GameScene extends Phaser.Scene {
     createPauseScreen() {
         this.createVeil();
 
-        this.textPause = this.add.text(175, 45, 'PAUSED');
+        this.textPause = this.add.text(175, 55, 'PAUSED');
+        this.textPause.setFontSize('20px')
         this.textPause.setDepth(101);
         this.textPause.setScrollFactor(0);
 
@@ -355,6 +382,10 @@ class GameScene extends Phaser.Scene {
         
         this.textPause.setVisible(paused);
         this.textObjective.setVisible(paused);
+        this.restartButton.setVisible(paused);
+        this.restartButton.setPosition(90, 180);
+        this.menuButton.setVisible(paused);
+        this.menuButton.setPosition(230, 180)
 
         if (this.countdown.active == true) {
             this.timerLabel.setVisible(paused);
@@ -400,6 +431,14 @@ class GameScene extends Phaser.Scene {
 //        console.log("GAME OVER - FINAL SCORE: ", this.player.score);
 //        //this.scene.start('LoseScene')  use this to change to lose scene on game over
 //    }
+
+    mainMenu() {
+        console.log("return to main menu");
+    }
+
+    restartGame() {
+        console.log("restart game")
+    }
  
     // general update class, ran with each game 'tick' //
     update(time, delta) {
@@ -471,6 +510,13 @@ class GameScene extends Phaser.Scene {
             this.anims.pauseAll()
             this.player.setTint(0xff0000);
             this.gameOverText.setVisible(true)
+            this.scoreText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).setOrigin(0.5)
+            this.scoreText.setDepth(101)
+            this.menuButton.setVisible(true)
+            this.menuButton.setPosition(230, 140)
+            this.restartButton.setVisible(true)
+            this.restartButton.setPosition(90, 140)
+            this.input.keyboard.enabled = false;
         }
 
 
