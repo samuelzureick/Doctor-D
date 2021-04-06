@@ -14,6 +14,10 @@ class GameScene extends Phaser.Scene {
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
         this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
+<<<<<<< HEAD
+=======
+        this.load.image('doors', 'teamAssets/Tilemap/door-tiles.png')
+>>>>>>> c1aeb4fbdf44c9f36b337339ef530d92b1e610f6
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
@@ -74,14 +78,19 @@ class GameScene extends Phaser.Scene {
             })
 
         }
-
+        
         // setting up tilemap, layers and collisions //
         const tileset = this.map.addTilesetImage('tileset', 'tiles')
+        const doorTileset = this.map.addTilesetImage('door-tiles', 'doors')
         const belowLayer = this.map.createStaticLayer('below player', tileset, 0, 0)
         const worldLayer = this.map.createStaticLayer('world', tileset, 0, 0)
-        console.log(this.registry.list.load)
+        const door = this.map.createStaticLayer('door', doorTileset, 0, 0)
 
         worldLayer.setCollisionByProperty({
+            collides: true
+        })
+
+        door.setCollisionByProperty({
             collides: true
         })
 
@@ -106,7 +115,12 @@ class GameScene extends Phaser.Scene {
         // initialise player + collisions //
         this.player = new Player(this, 200, 120, 'characters')
         this.player.setDepth(1);
+<<<<<<< HEAD
         this.physics.add.collider(this.player, worldLayer, this.testForDoor, null, this)
+=======
+        this.physics.add.collider(this.player, worldLayer)
+        this.physics.add.collider(this.player, door, this.testForDoor, null, this)
+>>>>>>> c1aeb4fbdf44c9f36b337339ef530d92b1e610f6
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
 
@@ -235,10 +249,19 @@ class GameScene extends Phaser.Scene {
         this.player.updateScore(5)
     }
     
-    testForDoor(player, world) {
+    testForDoor(player, door) {
         //get properties of world collision
+<<<<<<< HEAD
         let data = world.properties
         if (data.door && this.roomCleared) {
+=======
+        // let data = door.properties
+        // console.log(data)
+        // if (!data.end) {
+        //     this.scene.restart('room' + (this.registry.list.load ^ 1))
+        // }
+        if (this.roomCleared){
+>>>>>>> c1aeb4fbdf44c9f36b337339ef530d92b1e610f6
             this.scene.restart('room' + (this.registry.list.load ^ 1))
         }
     }
