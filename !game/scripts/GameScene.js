@@ -214,7 +214,7 @@ class GameScene extends Phaser.Scene {
     testForDoor(player, world) {
         //get properties of world collision
         let data = world.properties
-        if (data.door) {
+        if (data.door && this.enemies.children.entries.length == 0) {
             this.scene.restart('room' + (this.registry.list.load ^ 1))
         }
     }
@@ -469,17 +469,9 @@ class GameScene extends Phaser.Scene {
         }
 
         this.player.update(time, delta, pointer)
-
-        // update enemy group so 5 enemies are always alive //
         this.enemies.children.iterate((child) => {
-            if(!child.isDead) {
-                child.update(this)
-                if (!this.enemies.isFull()){
-                    const e = new Enemy(this, 220, 250, 'enemy')
-                    e.body.setCollideWorldBounds(true)
-                    this.enemies.add(e)
-                }
-            }
+            child.update(this)
+        })
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
         if (Phaser.Input.Keyboard.JustDown(this.keys.minus)) {
@@ -487,8 +479,6 @@ class GameScene extends Phaser.Scene {
         } else if (Phaser.Input.Keyboard.JustDown(this.keys.plus)) {
             this.addHealth()
         }
-
-        })
 
         if (this.gameOver) {
             this.veil.setVisible(true);
