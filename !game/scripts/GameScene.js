@@ -15,8 +15,8 @@ class GameScene extends Phaser.Scene {
         this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.image('doors', 'teamAssets/Tilemap/door-tiles.png')
-        this.load.tilemapTiledJSON('room0', 'scripts/room0.json')
-        this.load.tilemapTiledJSON('room1', 'scripts/room1.json')
+        this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
+        this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
