@@ -51,10 +51,8 @@ class GameScene extends Phaser.Scene {
         this.scoreText
         this.ammoText
         this.veilVisible
-        this.toggleObjectives
-        this.togglePause
+        this.togglePause = false
         this.timerLabel
-        this.isPause
         this.isObjective
         this.gameOver = false
         this.roomCleared = false
@@ -92,7 +90,7 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)   
 
         // for timer //
-        this.timerLabel = this.add.text(340, 137, '45').setOrigin(0.5);
+        this.timerLabel = this.add.text(350, 157, '45').setOrigin(0.5);
         this.timerLabel.setDepth(101);
         this.countdown = new CountdownController(this, this.timerLabel);
         this.countdown.start(this.handleCountdownFinished.bind(this)); 
@@ -169,8 +167,7 @@ class GameScene extends Phaser.Scene {
             setXY: {x: Phaser.Math.Between(0, 400), y: Phaser.Math.Between(0, 320)}
         })
 
-        // Initialise Objectives and Pause Screen //
-        this.createObjectivesScreen();
+        // Initialise Pause Screen //
         this.createPauseScreen();
 
         // Add keys for inputs + projectiles //
@@ -229,9 +226,7 @@ class GameScene extends Phaser.Scene {
     }
     
     handleCountdownFinished()
-    {
-        this.player.active = false
-    }
+    {}
 
     // Func for delayed reload // 
     reloadFunc() {
@@ -331,67 +326,62 @@ class GameScene extends Phaser.Scene {
         this.veilVisible = true;
     }
 
-    // Objectives Screen //
-    createObjectivesScreen() {
-        this.createVeil();
-        this.textObjective = this.add.text(150, 45, 'OBJECTIVES');
-        this.textObjective.setDepth(101);
-        this.textObjective.setScrollFactor(0);
-
-        this.CollectObjective = this.add.text(75, 100, 'Collect 5 Stars');
-        this.CollectObjective.setDepth(101);
-        this.CollectObjective.setScrollFactor(0);
-
-        this.EnemyObjective = this.add.text(75, 130, 'Eliminate 5 Enemies in: ');
-        this.EnemyObjective.setDepth(101);
-        this.EnemyObjective.setScrollFactor(0);
-
-        this.toggleScreen(false, "objectives"); //hides
-    }
-    
-    // Pause Screen //
+    // Pause & Objectives Screen //
     createPauseScreen() {
-        this.createVeil()
-        this.textPause = this.add.text(175, 45, 'PAUSE');
+        this.createVeil();
+
+        this.textPause = this.add.text(175, 45, 'PAUSED');
         this.textPause.setDepth(101);
         this.textPause.setScrollFactor(0);
 
-        this.toggleScreen(false, "pause"); //hides
+        this.textObjective = this.add.text(75, 90, 'OBJECTIVES:');
+        this.textObjective.setDepth(101);
+        this.textObjective.setScrollFactor(0);
+
+        this.CollectObjective = this.add.text(85, 120, 'Collect 5 Stars');
+        this.CollectObjective.setDepth(101);
+        this.CollectObjective.setScrollFactor(0);
+
+        this.EnemyObjective = this.add.text(85, 150, 'Eliminate 5 Enemies in: ');
+        this.EnemyObjective.setDepth(101);
+        this.EnemyObjective.setScrollFactor(0);
+
+        this.toggleScreen(this.togglePause, "pause"); //hides
     }
 
-    // displays the 'veil' and then displays either the pause / objectives screen
-    toggleScreen(isVisible, whichScreen) {
-        this.veil.setVisible(isVisible);
+    // displays the 'veil' and then displays the pause screen
+    toggleScreen(paused) {
+        this.veil.setVisible(paused);
         
-        // need an if-statement so the objectives page and pause page can't be displayed at the same time
-        if (whichScreen == "objectives") {
-            this.textObjective.setVisible(isVisible);
-            if (this.countdown.active == true) {
-                this.timerLabel.setVisible(isVisible);
-            }
+        this.textPause.setVisible(paused);
+        this.textObjective.setVisible(paused);
 
-            // check if player has completed either objective.
-            if(this.player.getCoin() >= 5) {
-                this.CollectObjective.setText('Collect 5 Stars ✓');
-            }
-            this.CollectObjective.setVisible(isVisible);
-            
-            // set to 1, for the purpose of testing.
-            if(this.player.getEnemy() >= 5 && this.countdown.getDuration() > 0)  {
-                this.countdown.stop()
-                this.timerLabel.setVisible(false);
-                this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
-            }
-            this.EnemyObjective.setVisible(isVisible);
-        } else if (whichScreen == "pause") {
-            this.textPause.setVisible(isVisible);
+        if (this.countdown.active == true) {
+            this.timerLabel.setVisible(paused);
         }
-    }
 
-    // Pause on button press OR on key press "esc" //
-    clickPause() {
-        this.isPause = !this.isPause
-        this.toggleScreen(this.isPause, "pause")
+        // check if player has completed either objective.
+        if(this.player.getCoin() >= 5) {
+            this.CollectObjective.setText('Collect 5 Stars ✓');
+        }
+        this.CollectObjective.setVisible(paused);
+        
+        // set to 1, for the purpose of testing.
+        if(this.player.getEnemy() >= 5 && this.countdown.getDuration() > 0)  {
+            this.countdown.stop()
+            this.timerLabel.setVisible(false);
+            this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
+        }
+        this.EnemyObjective.setVisible(paused);
+
+        if (paused) {
+            this.physics.pause()
+            this.anims.pauseAll()
+        }
+        else {
+            this.physics.resume()
+            this.anims.resumeAll()
+        }
     }
 
     // Decrease/increase player health //
@@ -436,7 +426,7 @@ class GameScene extends Phaser.Scene {
             }
         }
         this.gun.update(time, delta, pointer, this)
-        this.crosshair.update(time, delta, pointer)
+        this.crosshair.update(time, delta, pointer, this.togglePause, this.gameOver)
 
         // reloads guns //
         this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
@@ -454,27 +444,11 @@ class GameScene extends Phaser.Scene {
             this.reloadText.setVisible(true)
         }
 
-        // Open objectives on key press "Q" //
-        if (this.keys.q.isDown) {
-            if (!this.toggleObjectives && !this.isPause) {
-                this.toggleObjectives = true;
-                this.isObjective = !this.isObjective
-                this.toggleScreen(this.isObjective, "objectives");
-            }
-        }
-        if(this.keys.q.isUp) {
-            this.toggleObjectives = false;
-        }
-
+   
         // Pause //
-        if(this.keys.esc.isDown) {
-            if (!this.togglePause && !this.isObjective) {
-                this.togglePause = true;
-                this.clickPause();
-            }
-        }
-        if (this.keys.esc.isUp) {
-            this.togglePause = false;
+        if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
+            this.togglePause = !this.togglePause
+            this.toggleScreen(this.togglePause)
         }
 
         this.player.update(time, delta, pointer)
@@ -501,7 +475,9 @@ class GameScene extends Phaser.Scene {
 
 
         //timer
-        this.countdown.update();
+        if (!this.togglePause) {
+            this.countdown.update();
+        }
     } //end update
 
 

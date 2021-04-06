@@ -9,9 +9,16 @@ class Crosshair extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this)
     }
 
-    update(time, delta, pointer) {
+    update(time, delta, pointer, gameOver, paused) {
+        if (gameOver || paused) {
+            this.setActive(false)
+            this.setVisible(false)
+        }
+        else {
+            this.setActive(true)
+            this.setVisible(true)
+        }
         this.x = pointer.x
         this.y = pointer.y + 2
-
     }
 }
