@@ -215,8 +215,16 @@ class GameScene extends Phaser.Scene {
     testForDoor(player, world) {
         //get properties of world collision
         let data = world.properties
-        if (data.door && this.enemies.children.entries.length == 0) {
+        if (data.door && this.roomCleared) {
             this.scene.restart('room' + (this.registry.list.load ^ 1))
+        }
+    }
+
+    // Function to remove enemy from scene. If the enemy is the final one alive set room cleared flag to true
+    removeEnemy(enemy) {
+        this.enemies.remove(enemy, true, true)
+        if (this.enemies.getChildren().length == 0) {
+            this.roomCleared = true
         }
     }
     
@@ -261,7 +269,7 @@ class GameScene extends Phaser.Scene {
                     callback: () => {
                         this.player.updateScore(5);
                         this.player.addEnemy()
-                        enemy.explode()
+                        this.removeEnemy(enemy)
                         projectile.recycle()
                     },
                     callbackScope: this,
@@ -285,7 +293,7 @@ class GameScene extends Phaser.Scene {
             callbackScope: this,
             loop: false
         })
-        enemy.explode()
+        this.removeEnemy(enemy)
         this.removeHealth()
     }
 
@@ -470,9 +478,11 @@ class GameScene extends Phaser.Scene {
         }
 
         this.player.update(time, delta, pointer)
-        this.enemies.children.iterate((child) => {
-            child.update(this)
-        })
+        if(!this.roomCleared){
+            this.enemies.children.iterate((child) => {
+                child.update(this)
+            })
+        }
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
         if (Phaser.Input.Keyboard.JustDown(this.keys.minus)) {
