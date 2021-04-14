@@ -1,4 +1,4 @@
-class GameScene extends Phaser.Scene {
+https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Leaderboard.htmlclass GameScene extends Phaser.Scene {
     
     countdown
     constructor() {
@@ -444,6 +444,7 @@ class GameScene extends Phaser.Scene {
 //    }
 
     mainMenu() {
+        window.location.assign("https://www.google.com");
         console.log("return to main menu");
     }
 
