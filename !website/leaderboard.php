@@ -6,7 +6,7 @@
  mysqli_select_db($conn, "x83005sz");
 
 
-  $sql = "SELECT * FROM leaderboard ORDER BY score ASC";
+  $sql = "SELECT * FROM leaderboard ORDER BY score DESC";
   $records = $conn->query($sql);
 
 
@@ -42,7 +42,7 @@ $main = "
     </div>
   </div>";
   $count = 1;
-  while ($row = $records->fetch_assoc() && $count < 6)
+  while ($row = $records->fetch_assoc() and $count < 6)
   {
   $main .= "<div class='tableRow'>
   	<div class='cell'>
