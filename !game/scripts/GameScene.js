@@ -1,9 +1,11 @@
-https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Leaderboard.htmlclass GameScene extends Phaser.Scene {
+class GameScene extends Phaser.Scene 
+{
     
     countdown
     constructor() {
         super('GameScene')
     }
+    
 
     preload() {
         this.cursors
@@ -444,11 +446,12 @@ https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Leaderboar
 //    }
 
     mainMenu() {
-        location.assign("https://www.google.com");
-        console.log("return to main menu");
+        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
+        console.log("return to main menu")
     }
 
     restartGame() {
+        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!game/")
         console.log("restart game")
     }
  
@@ -539,4 +542,4 @@ https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Leaderboar
     } //end update
 
 
-} //end gameScene
+}//end gameScene
