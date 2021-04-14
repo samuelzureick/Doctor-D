@@ -6,7 +6,7 @@
 
 	$host = 'dbhost.cs.man.ac.uk';
 	$un = 'x83005sz'; 
-	$pw = 'x14databasepass';
+	$pw = 'databasepassword';
 	$DB = 'x83005sz';
 	//$database = "leaderboard";
 
