@@ -444,7 +444,7 @@ https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Leaderboar
 //    }
 
     mainMenu() {
-        window.location.href = "https://www.google.com";
+        location.href = "https://www.google.com";
         console.log("return to main menu");
     }
 
