@@ -59,6 +59,8 @@ class GameScene extends Phaser.Scene
         this.isObjective
         this.gameOver = false
         this.roomCleared = false
+        this.countdownFinished = false
+        this.hasWon;
 
     } // end preload
 
@@ -253,6 +255,9 @@ class GameScene extends Phaser.Scene
         // }
         if (this.roomCleared){
             this.scene.restart('room' + (this.registry.list.load ^ 1))
+            if (this.registry.list.load == '1') {
+                this.hasWon = true;
+            }
         }
     }
 
@@ -410,9 +415,14 @@ class GameScene extends Phaser.Scene
         }
         this.CollectObjective.setVisible(paused);
         
-        // set to 1, for the purpose of testing.
-        if(this.player.getEnemy() >= 5 && this.countdown.getDuration() > 0)  {
-            this.countdown.stop()
+        if (this.countdownFinished == false) {
+            if(this.player.getEnemy() >= 5 && this.countdown.getDuration() > 0)  {
+                this.countdown.stop()
+                this.countdownFinished = true;
+                this.timerLabel.setVisible(false);
+                this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
+            }
+        } else {
             this.timerLabel.setVisible(false);
             this.EnemyObjective.setText('Eliminate 5 Enemies ✓')
         }
@@ -451,8 +461,7 @@ class GameScene extends Phaser.Scene
     }
 
     restartGame() {
-        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!game/")
-        console.log("restart game")
+        this.scene.restart('room0')
     }
  
     // general update class, ran with each game 'tick' //
@@ -517,6 +526,12 @@ class GameScene extends Phaser.Scene
             this.removeHealth()
         } else if (Phaser.Input.Keyboard.JustDown(this.keys.plus)) {
             this.addHealth()
+        }
+
+        if (this.hasWon) {
+            this.gameOver = true;
+            this.gameOverText.setText("YOU WON!");
+            this.gameOverText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 100).setOrigin(0.5)
         }
 
         if (this.gameOver) {
