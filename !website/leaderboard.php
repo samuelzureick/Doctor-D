@@ -46,7 +46,7 @@ $main = "
   {
   $main .= "<div class='tableRow'>
   	<div class='cell'>
-  		<div class='row$count'></div>
+  		<div class='row$count'>$count</div>
   	</div>
   	<div class='cell'>
   		<div class='textbox'>
