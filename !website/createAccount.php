@@ -4,7 +4,7 @@
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <title>Create Account</title>
-  <link rel='stylesheet' type='text/css' href='webSiteStyleSheet.css'>
+  <link rel='stylesheet' type='text/css' href='images/webSiteStyleSheet.css'>
 </head>
 <body onload='warning()'>
   <div class='createAccFillerSpace'>
