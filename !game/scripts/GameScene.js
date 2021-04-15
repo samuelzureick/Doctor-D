@@ -36,6 +36,7 @@ class GameScene extends Phaser.Scene
         this.load.image('coin7', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_7.png')
         this.load.image('coin8', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_8.png')
 
+        this.load.html('nameform', 'teamAssets/text/loginform.html');
 
         //////////////////////////////////////////////////////////////////////////
 
@@ -162,6 +163,11 @@ class GameScene extends Phaser.Scene
         this.gameOverText.setColor('#FFFFFF')
         this.gameOverText.setDepth(101);
         this.gameOverText.setVisible(false)
+
+        // Username Form //
+        this.usernameForm = this.add.dom(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).createFromCache('nameform');
+        this.usernameForm.setInteractive();
+        this.usernameForm.setVisible(false);
 
         // Restart Game //
         this.restartButton = this.add.text(90, 140, 'Restart', { fill: '#FFFFFF'});
@@ -456,9 +462,12 @@ class GameScene extends Phaser.Scene
 //    }
 
     mainMenu() {
+        var inputUsername = this.usernameForm.getChildByID('name');
+        console.log(inputUsername.value);
         location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
         console.log("return to main menu")
     }
+
 
     restartGame() {
         this.scene.restart('room0')
@@ -540,12 +549,13 @@ class GameScene extends Phaser.Scene
             this.anims.pauseAll()
             this.player.setTint(0xff0000);
             this.gameOverText.setVisible(true)
-            this.scoreText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).setOrigin(0.5)
+            this.usernameForm.setVisible(true)
+            this.scoreText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 150).setOrigin(0.5)
             this.scoreText.setDepth(101)
             this.menuButton.setVisible(true)
-            this.menuButton.setPosition(230, 140)
+            this.menuButton.setPosition(230, 170)
             this.restartButton.setVisible(true)
-            this.restartButton.setPosition(90, 140)
+            this.restartButton.setPosition(90, 170)
             this.input.keyboard.enabled = false;
         }
 
