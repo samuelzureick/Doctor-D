@@ -485,8 +485,8 @@ class GameScene extends Phaser.Scene
 
     submitLeaderboard(event) {
             if (event.target.name == 'submitButton') {
-                var inputUsername = this.usernameForm.getChildByID('name');
-                console.log(inputUsername.value);
+                sessionStorage.setItem("score", this.player.score);
+                window.location.href=("../\!game/scripts/processScore.html")
             }
         }
     
