@@ -278,10 +278,10 @@ class GameScene extends Phaser.Scene
         //     this.scene.restart('room' + (this.registry.list.load ^ 1))
         // }
         if (this.roomCleared){
-            this.scene.restart('room' + (this.registry.list.load))
             if (this.registry.list.load == '2') {
                 this.hasWon = true;
             }
+            this.scene.restart('room' + (this.registry.list.load))
         }
     }
 
