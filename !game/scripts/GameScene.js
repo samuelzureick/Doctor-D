@@ -453,6 +453,10 @@ class GameScene extends Phaser.Scene
         }
     }
 
+    toggleClearedText(visible) {
+        this.clearedText.setVisible(!visible)
+    }
+
     // Decrease/increase player health //
     removeHealth() {
         this.player.updateHealth(-1)
@@ -570,10 +574,11 @@ class GameScene extends Phaser.Scene
             })
 
             this.clearedText.setVisible(false)
-        } else {
+        } 
+        else {
             if (time > this.clearDelay) {
-                this.clearDelay = time + 200
-                this.toggleClearedText(this.roomCleared.visible)
+                this.clearDelay = time + 650
+                this.toggleClearedText(this.clearedText.visible)
             }
         }
 
