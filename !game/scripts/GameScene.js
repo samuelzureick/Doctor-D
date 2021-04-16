@@ -88,10 +88,11 @@ class GameScene extends Phaser.Scene
 
     } // end preload
     create(data) {
-        var tileset;
         console.log(data)
+        var tileset;
         if (Object.getOwnPropertyNames(data).length > 0) {
-            this.registry.list.load ++
+            this.registry.list.load = parseInt(data) + 1
+            console.log(this.registry.list.load)
         } else {
             // create tilemap //
             this.registry.set('load', 0)
@@ -281,7 +282,8 @@ class GameScene extends Phaser.Scene
             if (this.registry.list.load == '3') {
                 this.hasWon = true;
             } else {
-                this.scene.restart('room' + (this.registry.list.load))
+                console.log(this.registry.list.load)
+                this.scene.restart(this.registry.list.load.toString())
             }
         }
     }
@@ -484,13 +486,13 @@ class GameScene extends Phaser.Scene
     mainMenu() {
         var inputUsername = this.usernameForm.getChildByID('name'); 
         console.log(inputUsername.value);
-        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
+        window.location.href = "../!website/Menu.html";
         console.log("return to main menu")
     }
 
 
     restartGame() {
-        this.scene.restart('room0')
+        this.scene.restart(-1)
     }
  
     // general update class, ran with each game 'tick' //
