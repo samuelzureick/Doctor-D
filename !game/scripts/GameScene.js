@@ -482,7 +482,7 @@ class GameScene extends Phaser.Scene
     mainMenu() {
         var inputUsername = this.usernameForm.getChildByID('name'); 
         console.log(inputUsername.value);
-        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
+        window.location.href = "../!website/Menu.html";
         console.log("return to main menu")
     }
 
