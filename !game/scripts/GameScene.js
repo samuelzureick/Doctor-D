@@ -92,7 +92,7 @@ class GameScene extends Phaser.Scene
             this.registry.list.load ++
         } else {
             // create tilemap //
-            this.registry.set('load', 0)
+            this.registry.set('load', 2)
         }
 
         this.map = this.make.tilemap({
