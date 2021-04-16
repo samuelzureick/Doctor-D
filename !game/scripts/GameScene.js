@@ -19,6 +19,7 @@ class GameScene extends Phaser.Scene
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.tilemapTiledJSON('room2', 'scripts/rooms/room2.json')
+        this.load.tilemapTiledJSON('room3', 'scripts/rooms/room3.json')
         
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
