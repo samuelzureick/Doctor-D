@@ -4,6 +4,7 @@ class GameScene extends Phaser.Scene
     countdown
     constructor() {
         super('GameScene')
+        //test
     }
     
 
