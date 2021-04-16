@@ -4,7 +4,17 @@
 </style>
     
 <div class="login">
-    <input type="text" placeholder="Name" id="name" name="name">
-    <input type="submit" value = "Submit" name = "submitButton">
+	<form method="POST" action="doLeaderboard.php" id="leaderForm">
+    	<input type="text" placeholder="Name" id="name" name="name">
+    	<input type="hidden" name="score" id="score" value="">
+    	<input type="submit" value = "Submit" name = "submitButton" onclick="addPostData();">
+	</form>
 </div>
 <div class="shadow"></div>
+
+<script type="text/javascript">
+	function addPostData() {
+        document.leaderboardForm.score.value = this.player.score;
+        document.forms["leaderboardForm"].submit();
+    }
+</script>
