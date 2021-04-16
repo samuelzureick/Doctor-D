@@ -19,6 +19,7 @@ class GameScene extends Phaser.Scene
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.tilemapTiledJSON('room2', 'scripts/rooms/room2.json')
+        this.load.tilemapTiledJSON('room3', 'scripts/rooms/room3.json')
         
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
@@ -60,7 +61,7 @@ class GameScene extends Phaser.Scene
         this.load.image('coin7', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_7.png')
         this.load.image('coin8', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_8.png')
 
-        this.load.html('nameform', 'teamAssets/text/loginform.html');
+        this.load.html('nameform', 'scripts/loginform.html');
 
         //////////////////////////////////////////////////////////////////////////
 
@@ -493,8 +494,8 @@ class GameScene extends Phaser.Scene
 
     submitLeaderboard(event) {
             if (event.target.name == 'submitButton') {
-                var inputUsername = this.usernameForm.getChildByID('name');
-                console.log(inputUsername.value);
+                sessionStorage.setItem("score", this.player.score);
+                window.location.href=("../\!game/scripts/processScore.html")
             }
         }
     

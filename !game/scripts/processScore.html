@@ -1,0 +1,45 @@
+
+
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<title>Log-In</title>
+	<link rel='stylesheet' type='text/css' href='processResources/webSiteStyleSheet.css'>
+</head>
+<body>
+	<div class='titleSpace'>
+		<div class='bounceTitle'></div>
+	</div>
+	
+
+	<div class='cloud'></div>
+	<div class='cloud1'></div>
+	<div class='cloud2'></div>
+	
+	<form method="POST" action ="doLeaderboard.php" name="mainform">
+	<div class='username'>
+		<div class='usernamePic'></div>
+		<div class='usernameForm'>
+			<input type='hidden' id='score' name='score'>
+			<input type='text' id='un' name='un'>
+			
+		</div>
+	</div>
+
+	<div class="wrapper">
+		<input type="image" src="processResources/submit.png" class="submitBuddon" type="submit">
+	</div>
+	</form>
+
+</body>
+<script type="text/javascript">
+	
+	console.log("in js")
+	var score = sessionStorage.getItem("score");
+	document.getElementById('score').value = score;
+	
+</script>
+</html>
