@@ -61,7 +61,7 @@ class GameScene extends Phaser.Scene
         this.load.image('coin7', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_7.png')
         this.load.image('coin8', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_8.png')
 
-        this.load.html('nameform', 'teamAssets/text/loginform.html');
+        this.load.html('nameform', 'loginform.html');
 
         //////////////////////////////////////////////////////////////////////////
 
