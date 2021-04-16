@@ -68,6 +68,7 @@ class GameScene extends Phaser.Scene
         this.crosshair
         this.projectiles
         this.lastFiredTime = 0
+        this.clearDelay = 0
         this.reloadStatus = false
         this.stars
         this.health_pickups
@@ -570,7 +571,10 @@ class GameScene extends Phaser.Scene
 
             this.clearedText.setVisible(false)
         } else {
-            this.clearedText.setVisible(true)
+            if (time > this.clearDelay) {
+                this.clearDelay = time + 200
+                this.toggleClearedText(this.roomCleared.visible)
+            }
         }
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
