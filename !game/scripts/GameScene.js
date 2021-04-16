@@ -4,6 +4,7 @@ class GameScene extends Phaser.Scene
     countdown
     constructor() {
         super('GameScene')
+        //test
     }
     
 
@@ -12,21 +13,26 @@ class GameScene extends Phaser.Scene
         this.cameras.main.setBackgroundColor(0x9900e3)
 
         //load sprite images//
-        this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
-        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
-        this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.image('lab-tiles', 'teamAssets/update_1.6/update 1.6/tileset/lab tileset.png')
+        
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.tilemapTiledJSON('room2', 'scripts/rooms/room2.json')
+        this.load.tilemapTiledJSON('room3', 'scripts/rooms/room3.json')
+        
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
         var frameNames = this.textures.get('characters').getFrameNames()
         this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
+        
+        this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
+        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
+        this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('ammoText', 'assets/ammo_text/AMMO.png')
+        this.load.image('clearedText', 'assets/ammo_text/noAmmo.png')
         this.load.image('ammo0', 'assets/ammo_text/ZERO.png')
         this.load.image('ammo1', 'assets/ammo_text/ONE.png')
         this.load.image('ammo2', 'assets/ammo_text/TWO.png')
@@ -34,6 +40,7 @@ class GameScene extends Phaser.Scene
         this.load.image('ammo4', 'assets/ammo_text/FOUR.png')
         this.load.image('ammo5', 'assets/ammo_text/FIVE.png')
         this.load.image('ammo6', 'assets/ammo_text/SIX.png')
+        
         this.load.image('reloadText', 'assets/ammo_text/reloading.png')
         this.load.image('noAmmoText', 'assets/ammo_text/noAmmo.png')
         this.load.image('pausedText', 'assets/pause_screen_text/PAUSED.png')
@@ -43,6 +50,7 @@ class GameScene extends Phaser.Scene
         this.load.image('gameOverText', 'assets/gameover_screen_text/gameOverText.png')
         this.load.image('blackBlock', 'assets/gameover_screen_text/blackBlock.png')
         this.load.image('gameWonText', 'assets/gameover_screen_text/gameWon.png')
+        
         this.load.image('coin0', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_0.png')
         this.load.image('coin1', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_1.png')
         this.load.image('coin2', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_2.png')
@@ -67,6 +75,7 @@ class GameScene extends Phaser.Scene
         this.crosshair
         this.projectiles
         this.lastFiredTime = 0
+        this.clearDelay = 0
         this.reloadStatus = false
         this.stars
         this.health_pickups
@@ -86,10 +95,11 @@ class GameScene extends Phaser.Scene
 
     } // end preload
     create(data) {
-        var tileset;
         console.log(data)
+        var tileset;
         if (Object.getOwnPropertyNames(data).length > 0) {
-            this.registry.list.load ++
+            this.registry.list.load = parseInt(data) + 1
+            console.log(this.registry.list.load)
         } else {
             // create tilemap //
             this.registry.set('load', 0)
@@ -184,6 +194,10 @@ class GameScene extends Phaser.Scene
         this.blackBlock.setDepth(100);
         this.blackBlock.setVisible(false)
 
+        this.clearedText = this.add.sprite(472,153,'clearedText')
+        this.clearedText.setDisplaySize(472,153)
+        this.clearedText.setVisible(false)
+
         // Username Form //
         this.usernameForm = this.add.dom(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).createFromCache('nameform');
         this.usernameForm.setInteractive();
@@ -271,17 +285,12 @@ class GameScene extends Phaser.Scene
     }
     
     testForDoor(player, door) {
-        //get properties of world collision
-        // let data = door.properties
-        // console.log(data)
-        // if (!data.end) {
-        //     this.scene.restart('room' + (this.registry.list.load ^ 1))
-        // }
         if (this.roomCleared){
-            if (this.registry.list.load == '2') {
+            if (this.registry.list.load == '3') {
                 this.hasWon = true;
             } else {
-                this.scene.restart('room' + (this.registry.list.load))
+                console.log(this.registry.list.load)
+                this.scene.restart(this.registry.list.load.toString())
             }
         }
     }
@@ -453,6 +462,10 @@ class GameScene extends Phaser.Scene
         }
     }
 
+    toggleClearedText(visible) {
+        this.clearedText.setVisible(!visible)
+    }
+
     // Decrease/increase player health //
     removeHealth() {
         this.player.updateHealth(-1)
@@ -480,13 +493,13 @@ class GameScene extends Phaser.Scene
     mainMenu() {
         var inputUsername = this.usernameForm.getChildByID('name'); 
         console.log(inputUsername.value);
-        location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
+        window.location.href = "../!website/Menu.html";
         console.log("return to main menu")
     }
 
 
     restartGame() {
-        this.scene.restart('room0')
+        this.scene.restart(-1)
     }
  
     // general update class, ran with each game 'tick' //
@@ -568,6 +581,14 @@ class GameScene extends Phaser.Scene
             this.enemies.children.iterate((child) => {
                 child.update(this)
             })
+
+            this.clearedText.setVisible(false)
+        } 
+        else {
+            if (time > this.clearDelay) {
+                this.clearDelay = time + 650
+                this.toggleClearedText(this.clearedText.visible)
+            }
         }
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
