@@ -16,9 +16,10 @@ class GameScene extends Phaser.Scene
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
         this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
-        this.load.image('doors', 'teamAssets/Tilemap/door-tiles.png')
+        this.load.image('lab-tiles', 'teamAssets/update_1.6/update 1.6/tileset/lab tileset.png')
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
+        this.load.tilemapTiledJSON('room2', 'scripts/rooms/room2.json')
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
@@ -85,26 +86,35 @@ class GameScene extends Phaser.Scene
 
     } // end preload
     create(data) {
+        var tileset;
         console.log(data)
         if (Object.getOwnPropertyNames(data).length > 0) {
-            this.map = this.make.tilemap({
-                key: data
-            })
-            this.registry.list.load = this.registry.list.load ^ 1
+            this.registry.list.load ++
         } else {
             // create tilemap //
             this.registry.set('load', 0)
-            this.map = this.make.tilemap({
-                key: 'room0'
-            })
         }
-        
+
+        this.map = this.make.tilemap({
+            key: 'room' + this.registry.list.load
+        })
+
+        console.log("MAP", this.map)
+        console.log("LEVEL", this.registry.list.load)
+        if (this.registry.list.load <=1){
+            tileset = this.map.addTilesetImage('tileset', 'tiles')
+        } else {
+            tileset = this.map.addTilesetImage('lab tileset', 'lab-tiles')
+        }
+        console.log(tileset)
+
         // setting up tilemap, layers and collisions //
-        const tileset = this.map.addTilesetImage('tileset', 'tiles')
-        const doorTileset = this.map.addTilesetImage('door-tiles', 'doors')
-        const belowLayer = this.map.createStaticLayer('below player', tileset, 0, 0)
-        const worldLayer = this.map.createStaticLayer('world', tileset, 0, 0)
-        const door = this.map.createStaticLayer('door', doorTileset, 0, 0)
+        // var tileset = this.map.addTilesetImage('tileset', 'tiles')
+        
+        var belowLayer = this.map.createStaticLayer('below player', tileset, 0, 0)
+        var worldLayer = this.map.createStaticLayer('world', tileset, 0, 0)
+        var door = this.map.createStaticLayer('door', tileset, 0, 0)
+
         worldLayer.setCollisionByProperty({
             collides: true
         })
@@ -252,10 +262,8 @@ class GameScene extends Phaser.Scene
             this.heart_arr.push(heart);
         }
 
-        console.log(this.cameras.main)
-
     } //end create
-
+    
     addCoin(player, coin) {
         this.coins.remove(coin, true, true)
         this.player.updateScore(5)
@@ -269,8 +277,8 @@ class GameScene extends Phaser.Scene
         //     this.scene.restart('room' + (this.registry.list.load ^ 1))
         // }
         if (this.roomCleared){
-            this.scene.restart('room' + (this.registry.list.load ^ 1))
-            if (this.registry.list.load == '1') {
+            this.scene.restart('room' + (this.registry.list.load))
+            if (this.registry.list.load == '5') {
                 this.hasWon = true;
             }
         }
