@@ -30,8 +30,9 @@ class GameScene extends Phaser.Scene
         this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
         this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
         this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
+        this.load.image('reloadText', 'assets/ammo_text/reloading.png')
+        this.load.image('noAmmoText', 'assets/ammo_text/noAmmo.png')
         this.load.image('ammoText', 'assets/ammo_text/AMMO.png')
-        this.load.image('clearedText', 'assets/ammo_text/noAmmo.png')
         this.load.image('ammo0', 'assets/ammo_text/ZERO.png')
         this.load.image('ammo1', 'assets/ammo_text/ONE.png')
         this.load.image('ammo2', 'assets/ammo_text/TWO.png')
@@ -40,8 +41,7 @@ class GameScene extends Phaser.Scene
         this.load.image('ammo5', 'assets/ammo_text/FIVE.png')
         this.load.image('ammo6', 'assets/ammo_text/SIX.png')
         
-        this.load.image('reloadText', 'assets/ammo_text/reloading.png')
-        this.load.image('noAmmoText', 'assets/ammo_text/noAmmo.png')
+        this.load.image('clearedText', 'assets/roomCleared.png')
         this.load.image('pausedText', 'assets/pause_screen_text/PAUSED.png')
         this.load.image('objectivesText', 'assets/pause_screen_text/OBJECTIVES.png')
         this.load.image('restartText', 'assets/pause_screen_text/RESTART.png')
@@ -154,11 +154,14 @@ class GameScene extends Phaser.Scene
         this.physics.add.collider(this.player, door, this.testForDoor, null, this)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
+        
         // initialise gun //
         this.gun = new Gun(this, 200, 120, 6, 'gun')
         this.gun.setDepth(1);
+        
         // initialise crosshair //
         this.crosshair = new Crosshair(this, 200, 120, 'crosshair')
+        
         // initialise enemies + add collisions //
         this.enemies = this.add.group()
         this.enemies.maxSize = 5
@@ -169,20 +172,24 @@ class GameScene extends Phaser.Scene
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
+        
         // Create Score Text //
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
         this.scoreText.setDepth(103);  
+        
         // Create Ammo Text //
         this.ammoText = this.add.sprite(350, 295, 'ammoText')
         this.ammoText.setDisplaySize(29, 8)
         this.ammoNumber = this.add.sprite(375, 293, 'ammo6')
         this.ammoNumber.setDisplaySize(10, 12)
+        
         // Reload Text //
         this.reloadText = this.add.sprite(0,0,'reloadText')
         this.reloadText.setDisplaySize(45,11)
         this.reloadText.setVisible(false)
+        
         // Game Over Text //
         this.gameOverText = this.add.sprite(this.cameras.main.worldView.x + this.cameras.main.width / 2, 100, 'gameOverText')
         this.gameOverText.setDisplaySize(472,153)
@@ -193,8 +200,9 @@ class GameScene extends Phaser.Scene
         this.blackBlock.setDepth(100);
         this.blackBlock.setVisible(false)
 
-        this.clearedText = this.add.sprite(472,153,'clearedText')
-        this.clearedText.setDisplaySize(472,153)
+        // Room Cleared Text //
+        this.clearedText = this.add.sprite(200, 90, 'clearedText')
+        this.clearedText.setDisplaySize(210, 50)
         this.clearedText.setVisible(false)
 
         // Username Form //
@@ -386,8 +394,8 @@ class GameScene extends Phaser.Scene
     collectHealth(player, heart) {
         heart.disableBody(true, true);
         this.addHealth()
-        if (this.health_pickups.countActive(true) === 0) {
-            this.health_pickups.children.iterate(function (child) {
+        if (this.health_pickups.countActive(true) === 0){
+            this.health_pickups.children.iterate(function (child){
                 child.enableBody(true, Phaser.Math.Between(0, 400), Phaser.Math.Between(0, 320), true, true);
             });
         }
@@ -429,6 +437,7 @@ class GameScene extends Phaser.Scene
         this.restartButton.setPosition(105, 250);
         this.menuButton.setVisible(paused);
         this.menuButton.setPosition(280, 250)
+        
         if (this.countdown.active == true) {
             this.timerLabel.setVisible(paused);
         }
@@ -505,8 +514,14 @@ class GameScene extends Phaser.Scene
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
         this.scoreText.setX(310 - (this.player.score.toString().length * 8))
-           
-            switch (this.gun.ammo){
+
+        // game over if player's health is 0 //
+        if (this.player.health <= 0) {
+            //game is over
+            this.gameOver = true
+        }
+
+        switch (this.gun.ammo){
             case 0:
                 this.ammoNumber.setTexture('ammo0')
                 break
@@ -530,11 +545,6 @@ class GameScene extends Phaser.Scene
                 break                                        
             default:
                 break
-        }
-        // game over if player's health is 0 //
-        if (this.player.health <= 0) {
-            //game is over
-            this.gameOver = true
         }
         
         // fire projectile on mouse click in mouse direction //
@@ -567,7 +577,6 @@ class GameScene extends Phaser.Scene
             this.reloadText.setTexture("noAmmoText")
             this.reloadText.setVisible(true)
         }
-
    
         // Pause //
         if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
@@ -575,13 +584,11 @@ class GameScene extends Phaser.Scene
             this.toggleScreen(this.togglePause)
         }
 
-        this.player.update(time, delta, pointer)
-        if(!this.roomCleared){
+        if (!this.roomCleared){
+            this.clearedText.setVisible(false)
             this.enemies.children.iterate((child) => {
                 child.update(this)
             })
-
-            this.clearedText.setVisible(false)
         } 
         else {
             if (time > this.clearDelay) {
@@ -593,7 +600,8 @@ class GameScene extends Phaser.Scene
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
         if (Phaser.Input.Keyboard.JustDown(this.keys.minus)) {
             this.removeHealth()
-        } else if (Phaser.Input.Keyboard.JustDown(this.keys.plus)) {
+        } 
+        else if (Phaser.Input.Keyboard.JustDown(this.keys.plus)) {
             this.addHealth()
         }
 
@@ -623,10 +631,8 @@ class GameScene extends Phaser.Scene
             this.input.keyboard.enabled = false;
             this.restartButton.setDepth(103);
             this.menuButton.setDepth(103);
-            if(this.hasWon)
-            {
-                if(this.player.score!=0)
-                {
+            if (this.hasWon){
+                if (this.player.score!=0){
                     this.finalScore = this.player.score
                 }
                 this.restartButton.setVisible(false)
@@ -634,12 +640,9 @@ class GameScene extends Phaser.Scene
                 this.scoreText.setText("Your score is " + this.finalScore + "!")
             }
         }
-        else
-        {
-            this.input.keyboard.enabled = true
-        }
-        //timer
+        else { this.input.keyboard.enabled = true }
         
+        this.player.update(time, delta, pointer)
         this.countdown.update(this.togglePause);
         
     } //end update
