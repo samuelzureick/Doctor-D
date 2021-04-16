@@ -59,20 +59,29 @@ class CountdownController
 		}
 	}
 
-	update()
+	update(pause)
 	{
-		if (!this.timerEvent || this.duration <= 0)
+		
+
+		if (!this.timerEvent || this.duration <= 0) 
 		{
             this.active = false 
             this.timerEvent
 			return
 		}
 
-		const elapsed = this.timerEvent.getElapsed()
-		const remaining = this.duration - elapsed
-		const seconds = remaining / 1000
+		if(pause)
+		{
+			this.timerEvent.paused = true
+		}else
+		{
+			this.timerEvent.paused = false
+			const elapsed = this.timerEvent.getElapsed()
+			const remaining = this.duration - elapsed
+			const seconds = remaining / 1000
 
-		this.label.text = seconds.toFixed(2)
+			this.label.text = seconds.toFixed(2)
+		}
 	}
 
     getDuration()

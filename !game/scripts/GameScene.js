@@ -25,7 +25,23 @@ class GameScene extends Phaser.Scene
         var frameNames = this.textures.get('characters').getFrameNames()
         this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
-
+        this.load.image('ammoText', 'assets/ammo_text/AMMO.png')
+        this.load.image('ammo0', 'assets/ammo_text/ZERO.png')
+        this.load.image('ammo1', 'assets/ammo_text/ONE.png')
+        this.load.image('ammo2', 'assets/ammo_text/TWO.png')
+        this.load.image('ammo3', 'assets/ammo_text/THREE.png')
+        this.load.image('ammo4', 'assets/ammo_text/FOUR.png')
+        this.load.image('ammo5', 'assets/ammo_text/FIVE.png')
+        this.load.image('ammo6', 'assets/ammo_text/SIX.png')
+        this.load.image('reloadText', 'assets/ammo_text/reloading.png')
+        this.load.image('noAmmoText', 'assets/ammo_text/noAmmo.png')
+        this.load.image('pausedText', 'assets/pause_screen_text/PAUSED.png')
+        this.load.image('objectivesText', 'assets/pause_screen_text/OBJECTIVES.png')
+        this.load.image('restartText', 'assets/pause_screen_text/RESTART.png')
+        this.load.image('menuText', 'assets/pause_screen_text/MENU.png')
+        this.load.image('gameOverText', 'assets/gameover_screen_text/gameOverText.png')
+        this.load.image('blackBlock', 'assets/gameover_screen_text/blackBlock.png')
+        this.load.image('gameWonText', 'assets/gameover_screen_text/gameWon.png')
         this.load.image('coin0', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_0.png')
         this.load.image('coin1', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_1.png')
         this.load.image('coin2', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_2.png')
@@ -41,6 +57,7 @@ class GameScene extends Phaser.Scene
         //////////////////////////////////////////////////////////////////////////
 
         // initialise class variables //    
+        this.finalScore
         this.player
         this.keys
         this.enemy
@@ -52,8 +69,11 @@ class GameScene extends Phaser.Scene
         this.reloadStatus = false
         this.stars
         this.health_pickups
-        this.scoreText
+        this.scoreText = this.add.text(310, 6, 'Score: 0')
         this.ammoText
+        this.ammoNumber
+        this.pausedText
+        this.objectivesText
         this.veilVisible
         this.togglePause = false
         this.timerLabel
@@ -61,10 +81,9 @@ class GameScene extends Phaser.Scene
         this.gameOver = false
         this.roomCleared = false
         this.countdownFinished = false
-        this.hasWon;
+        this.hasWon
 
     } // end preload
-
     create(data) {
         console.log(data)
         if (Object.getOwnPropertyNames(data).length > 0) {
@@ -78,7 +97,6 @@ class GameScene extends Phaser.Scene
             this.map = this.make.tilemap({
                 key: 'room0'
             })
-
         }
         
         // setting up tilemap, layers and collisions //
@@ -87,26 +105,21 @@ class GameScene extends Phaser.Scene
         const belowLayer = this.map.createStaticLayer('below player', tileset, 0, 0)
         const worldLayer = this.map.createStaticLayer('world', tileset, 0, 0)
         const door = this.map.createStaticLayer('door', doorTileset, 0, 0)
-
         worldLayer.setCollisionByProperty({
             collides: true
         })
-
         door.setCollisionByProperty({
             collides: true
         })
-
         this.physics.world.bounds.width = this.map.widthInPixels
         this.physics.world.bounds.height = this.map.heightInPixels
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)   
-
         // for timer //
-        this.timerLabel = this.add.text(350, 157, '45').setOrigin(0.5);
+        this.timerLabel = this.add.text(300, 178, '45').setOrigin(0.5);
         this.timerLabel.setDepth(101);
         this.countdown = new CountdownController(this, this.timerLabel);
         this.countdown.start(this.handleCountdownFinished.bind(this)); 
         this.timerLabel.setVisible(false)
-
         // const debugGraphics = this.add.graphics().setAlpha(0.2)
         // worldLayer.renderDebug(debugGraphics, {
         //     tileColor: null,
@@ -121,13 +134,11 @@ class GameScene extends Phaser.Scene
         this.physics.add.collider(this.player, door, this.testForDoor, null, this)
         this.cameras.main.startFollow(this.player, true, 0.8, 0.8)
         this.player.body.setCollideWorldBounds(true)
-
         // initialise gun //
         this.gun = new Gun(this, 200, 120, 6, 'gun')
         this.gun.setDepth(1);
         // initialise crosshair //
         this.crosshair = new Crosshair(this, 200, 120, 'crosshair')
-
         // initialise enemies + add collisions //
         this.enemies = this.add.group()
         this.enemies.maxSize = 5
@@ -138,41 +149,40 @@ class GameScene extends Phaser.Scene
             this.enemies.add(e)
         }
         this.physics.add.collider(this.enemies, worldLayer)
-
         // Create Score Text //
-        this.scoreText = this.add.text(310, 6, 'Score: 0')
         this.scoreText.setFontSize('15px')
         this.scoreText.setColor('#FFFFFF')
         this.scoreText.setBackgroundColor('#000000')
-
+        this.scoreText.setDepth(103);  
         // Create Ammo Text //
-        this.ammoText = this.add.text(315, 286, 'Ammo: ' + this.gun.ammo)
-        this.ammoText.setFontSize('15px')
-        this.ammoText.setColor('#FFFFFF')
-        this.ammoText.setBackgroundColor('#000000')
-
+        this.ammoText = this.add.sprite(350, 295, 'ammoText')
+        this.ammoText.setDisplaySize(29, 8)
+        this.ammoNumber = this.add.sprite(375, 293, 'ammo6')
+        this.ammoNumber.setDisplaySize(10, 12)
         // Reload Text //
-        this.reloadText = this.add.text(275, 286, 'Reloading', { fontFamily: 'Oswald, sans-serif'})
-        this.reloadText.setFontSize('7px')
-        this.reloadText.setColor('#d40000')
+        this.reloadText = this.add.sprite(0,0,'reloadText')
+        this.reloadText.setDisplaySize(45,11)
         this.reloadText.setVisible(false)
-
         // Game Over Text //
-        this.gameOverText = this.add.text(135, 90, 'GAME OVER')
-        this.gameOverText.setFontSize('25px')
-        this.gameOverText.setColor('#FFFFFF')
-        this.gameOverText.setDepth(101);
+        this.gameOverText = this.add.sprite(this.cameras.main.worldView.x + this.cameras.main.width / 2, 100, 'gameOverText')
+        this.gameOverText.setDisplaySize(472,153)
+        this.gameOverText.setDepth(102);
         this.gameOverText.setVisible(false)
+        this.blackBlock = this.add.sprite(0, 0, 'blackBlock')
+        this.blackBlock.setDisplaySize(1000,1000)
+        this.blackBlock.setDepth(100);
+        this.blackBlock.setVisible(false)
 
         // Username Form //
         this.usernameForm = this.add.dom(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).createFromCache('nameform');
         this.usernameForm.setInteractive();
+        this.usernameForm.addListener('click');
+        this.usernameForm.on('click', (event) => this.submitLeaderboard(event));
         this.usernameForm.setVisible(false);
 
         // Restart Game //
-        this.restartButton = this.add.text(90, 140, 'Restart', { fill: '#FFFFFF'});
-        this.restartButton.setBackgroundColor('#000000')
-        this.restartButton.setPadding(5, 5, 5, 5)
+        this.restartButton = this.add.sprite(100,50 ,'restartText');
+        this.restartButton.setDisplaySize(142.5,38)
         this.restartButton.setDepth(101);  
         this.restartButton.setInteractive();
         this.restartButton.on('pointerdown', () => this.restartGame());
@@ -180,9 +190,8 @@ class GameScene extends Phaser.Scene
 
 
         // Return to Menu Button //
-        this.menuButton = this.add.text(230, 140, 'Main Menu', { fill: '#FFFFFF'});
-        this.menuButton.setBackgroundColor('#000000')
-        this.menuButton.setPadding(5, 5, 5, 5)
+        this.menuButton = this.add.sprite(0,0, 'menuText');
+        this.menuButton.setDisplaySize(142.5,38)
         this.menuButton.setDepth(101);  
         this.menuButton.setInteractive();
         this.menuButton.on('pointerdown', () => this.mainMenu());
@@ -379,42 +388,32 @@ class GameScene extends Phaser.Scene
     // Pause & Objectives Screen //
     createPauseScreen() {
         this.createVeil();
-
-        this.textPause = this.add.text(175, 55, 'PAUSED');
-        this.textPause.setFontSize('20px')
-        this.textPause.setDepth(101);
-        this.textPause.setScrollFactor(0);
-
-        this.textObjective = this.add.text(75, 90, 'OBJECTIVES:');
-        this.textObjective.setDepth(101);
-        this.textObjective.setScrollFactor(0);
-
-        this.CollectObjective = this.add.text(85, 120, 'Collect 5 Stars');
+        this.pausedText = this.add.sprite(this.cameras.main.worldView.x + this.cameras.main.width / 2, 60, 'pausedText')
+        this.pausedText.setDepth(101);
+        this.objectivesText = this.add.sprite(120, 110, 'objectivesText')
+        this.objectivesText.setDepth(101);
+        this.objectivesText.setDisplaySize(172, 21)
+        this.CollectObjective = this.add.text(35, 140, 'Collect 5 Stars');
         this.CollectObjective.setDepth(101);
         this.CollectObjective.setScrollFactor(0);
-
-        this.EnemyObjective = this.add.text(85, 150, 'Eliminate 5 Enemies in: ');
+        this.EnemyObjective = this.add.text(35, 170, 'Eliminate 5 Enemies in: ');
         this.EnemyObjective.setDepth(101);
         this.EnemyObjective.setScrollFactor(0);
-
         this.toggleScreen(this.togglePause, "pause"); //hides
     }
-
     // displays the 'veil' and then displays the pause screen
     toggleScreen(paused) {
         this.veil.setVisible(paused);
         
-        this.textPause.setVisible(paused);
-        this.textObjective.setVisible(paused);
+        this.pausedText.setVisible(paused);
+        this.objectivesText.setVisible(paused);
         this.restartButton.setVisible(paused);
-        this.restartButton.setPosition(90, 180);
+        this.restartButton.setPosition(105, 250);
         this.menuButton.setVisible(paused);
-        this.menuButton.setPosition(230, 180)
-
+        this.menuButton.setPosition(280, 250)
         if (this.countdown.active == true) {
             this.timerLabel.setVisible(paused);
         }
-
         // check if player has completed either objective.
         if(this.player.getCoin() >= 5) {
             this.CollectObjective.setText('Collect 5 Stars ✓');
@@ -461,8 +460,15 @@ class GameScene extends Phaser.Scene
 //        //this.scene.start('LoseScene')  use this to change to lose scene on game over
 //    }
 
+    submitLeaderboard(event) {
+            if (event.target.name == 'submitButton') {
+                var inputUsername = this.usernameForm.getChildByID('name');
+                console.log(inputUsername.value);
+            }
+        }
+    
     mainMenu() {
-        var inputUsername = this.usernameForm.getChildByID('name');
+        var inputUsername = this.usernameForm.getChildByID('name'); 
         console.log(inputUsername.value);
         location.assign("https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!website/Menu.html")
         console.log("return to main menu")
@@ -477,8 +483,32 @@ class GameScene extends Phaser.Scene
     update(time, delta) {
         this.scoreText.setText('Score : ' + this.player.score);
         this.scoreText.setX(310 - (this.player.score.toString().length * 8))
-        this.ammoText.setText('Ammo: ' + this.gun.ammo);
-
+           
+            switch (this.gun.ammo){
+            case 0:
+                this.ammoNumber.setTexture('ammo0')
+                break
+            case 1:
+                this.ammoNumber.setTexture('ammo1')
+                break
+            case 2:
+                this.ammoNumber.setTexture('ammo2')
+                break
+            case 3:
+                this.ammoNumber.setTexture('ammo3')
+                break
+            case 4:
+                this.ammoNumber.setTexture('ammo4')
+                break
+            case 5:
+                this.ammoNumber.setTexture('ammo5')
+                break
+            case 6:
+                this.ammoNumber.setTexture('ammo6')
+                break                                        
+            default:
+                break
+        }
         // game over if player's health is 0 //
         if (this.player.health <= 0) {
             //game is over
@@ -488,7 +518,7 @@ class GameScene extends Phaser.Scene
         // fire projectile on mouse click in mouse direction //
         this.input.setDefaultCursor('url(teamAssets/blank_cursor.png), pointer') //hides cursor by making it a 1 pixel image
         var pointer = this.input.activePointer;
-        if(pointer.leftButtonDown() && !this.reloadStatus){
+        if(pointer.leftButtonDown() && !this.reloadStatus && !this.gameOver && !this.togglePause){
             if (this.gun.ammo > 0) {
                 if (time > this.lastFiredTime) {
                     this.lastFiredTime = time + 200 //set delay between projectile fire
@@ -501,10 +531,10 @@ class GameScene extends Phaser.Scene
         this.crosshair.update(time, delta, pointer, this.togglePause, this.gameOver)
 
         // reloads guns //
-        this.reloadText.setPosition(pointer.x - 16, pointer.y - 20)
+        this.reloadText.setPosition(pointer.x, pointer.y - 15)
         if (Phaser.Input.Keyboard.JustDown(this.keys.r) && !pointer.leftButtonDown()) {
             if (this.gun.ammo < this.gun.mag){
-                this.reloadText.setText("Reloading")
+                this.reloadText.setTexture("reloadText")
                 this.reloadText.setVisible(true)
                 this.reloadStatus = true
                 this.time.delayedCall(1000, this.reloadFunc, [], this)
@@ -512,7 +542,7 @@ class GameScene extends Phaser.Scene
         }
 
         if (this.gun.ammo == 0 && !this.reloadStatus) {
-            this.reloadText.setText("No Ammo")
+            this.reloadText.setTexture("noAmmoText")
             this.reloadText.setVisible(true)
         }
 
@@ -539,7 +569,8 @@ class GameScene extends Phaser.Scene
 
         if (this.hasWon) {
             this.gameOver = true;
-            this.gameOverText.setText("YOU WON!");
+            this.gameOverText.setTexture('gameWonText')
+            this.gameOverText.setDepth(102);
             this.gameOverText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 100).setOrigin(0.5)
         }
 
@@ -548,22 +579,39 @@ class GameScene extends Phaser.Scene
             this.physics.pause()
             this.anims.pauseAll()
             this.player.setTint(0xff0000);
-            this.gameOverText.setVisible(true)
             this.usernameForm.setVisible(true)
-            this.scoreText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 150).setOrigin(0.5)
-            this.scoreText.setDepth(101)
+            this.usernameForm.setDepth(103)
+            this.usernameForm.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 220).setOrigin(0.5)     
+            this.blackBlock.setVisible(true)
+            this.gameOverText.setVisible(true)
+            this.scoreText.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 190).setOrigin(0.5)
+            this.scoreText.setDepth(103)
             this.menuButton.setVisible(true)
-            this.menuButton.setPosition(230, 170)
+            this.menuButton.setPosition(320, 270)
             this.restartButton.setVisible(true)
-            this.restartButton.setPosition(90, 170)
+            this.restartButton.setPosition(90, 270)
             this.input.keyboard.enabled = false;
+            this.restartButton.setDepth(103);
+            this.menuButton.setDepth(103);
+            if(this.hasWon)
+            {
+                if(this.player.score!=0)
+                {
+                    this.finalScore = this.player.score
+                }
+                this.restartButton.setVisible(false)
+                this.menuButton.setPosition(this.cameras.main.worldView.x + this.cameras.main.width / 2, 270)
+                this.scoreText.setText("Your score is " + this.finalScore + "!")
+            }
         }
-
-
+        else
+        {
+            this.input.keyboard.enabled = true
+        }
         //timer
-        if (!this.togglePause) {
-            this.countdown.update();
-        }
+        
+        this.countdown.update(this.togglePause);
+        
     } //end update
 
 
