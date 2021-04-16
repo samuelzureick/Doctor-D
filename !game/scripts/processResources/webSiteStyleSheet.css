@@ -780,13 +780,7 @@ div.wrapper {
   margin: auto;
   width: 585px; 
   height: 50px;
-  margin-bottom: 1%;
-  background-color: #1c2627;
-  padding-top: 10px;
-  padding-left: 10px;
-  overflow: auto;
-  background-image: url("border.png");
-  background-repeat: no-repeat;
+ 
   text-align: center;
 }
 
