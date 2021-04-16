@@ -92,7 +92,8 @@ class GameScene extends Phaser.Scene
             this.registry.list.load ++
         } else {
             // create tilemap //
-            this.registry.set('load', 2)
+            this.registry.set('load', 0)
+            this.registry.set('score', 0)
         }
 
         this.map = this.make.tilemap({
@@ -278,7 +279,7 @@ class GameScene extends Phaser.Scene
         // }
         if (this.roomCleared){
             this.scene.restart('room' + (this.registry.list.load))
-            if (this.registry.list.load == '5') {
+            if (this.registry.list.load == '2') {
                 this.hasWon = true;
             }
         }
