@@ -47,7 +47,7 @@
 		</div>
 
 		<div class='guestPlayParent'>
-			<button class='guestPlayButton' onclick="location.href='https://web.cs.manchester.ac.uk/x83005sz/first_group_project/!game/';"></button>
+			<button class='guestPlayButton' onclick="location.href='../!game/';"></button>
 		</div>
 
 	</div>
