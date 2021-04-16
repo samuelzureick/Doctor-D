@@ -1,3 +1,7 @@
+
+}
+
+
 html{
   background: url("BACKGROUND.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -194,20 +198,14 @@ button.LogInButton2{
   outline: none;
   width: 90%;
   height: 70%;
-  background-image: url("submit.png");
+  
   background-repeat: no-repeat;
   background-size: 148px 32px;
   background-position: center;
   background-color: #1c2627;  
 }
 
-.submitbuddon{
-  margin:auto;
-}
 
-.wrapper {
-  text-align:center;
-}
 
 button.LogInButton{
   outline: none;
@@ -774,4 +772,26 @@ button.backButton{
   background-size: 109.16px 32px;
   background-position: center;
   background-color: #1c2627;  
+}
+
+
+
+div.wrapper {
+  margin: auto;
+  width: 585px; 
+  height: 50px;
+  margin-bottom: 1%;
+  background-color: #1c2627;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow: auto;
+  background-image: url("border.png");
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
+.submitBuddon{
+  display: block;
+  margin:0 auto;
+  
 }
