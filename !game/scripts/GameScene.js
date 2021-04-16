@@ -4,6 +4,7 @@ class GameScene extends Phaser.Scene
     countdown
     constructor() {
         super('GameScene')
+        //test
     }
     
 
@@ -12,20 +13,23 @@ class GameScene extends Phaser.Scene
         this.cameras.main.setBackgroundColor(0x9900e3)
 
         //load sprite images//
-        this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
-        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
-        this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('tiles', 'assets/Tilemap/16 x 16 codename iso game.png')
         this.load.image('lab-tiles', 'teamAssets/update_1.6/update 1.6/tileset/lab tileset.png')
+        
         this.load.tilemapTiledJSON('room0', 'scripts/rooms/room0.json')
         this.load.tilemapTiledJSON('room1', 'scripts/rooms/room1.json')
         this.load.tilemapTiledJSON('room2', 'scripts/rooms/room2.json')
+        
         this.load.atlas('characters', 'teamAssets/sprites/character.png', 'teamAssets/sprites/character.json')
         this.load.image('health', 'teamAssets/UI/Hearts/hearts_hearts_0.png')       // maybe rename health images to something better 
         this.load.image('health-lost', 'teamAssets/UI/Hearts/hearts_hearts_1.png')  // maybe rename health images to something better 
         var frameNames = this.textures.get('characters').getFrameNames()
         this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
+        
+        this.load.image('gun', 'teamAssets/PlayerCharacter/Gun/Main Gun/main gun_Gun_0.png')
+        this.load.image('bullet', 'teamAssets/PlayerCharacter/Gun/Main Gun/shell_shotgun shell_0.png')
+        this.load.image('crosshair', 'teamAssets/PlayerCharacter/Gun/Crosshair/crosshair_Crosshair_0_2x.png')
         this.load.image('ammoText', 'assets/ammo_text/AMMO.png')
         this.load.image('clearedText', 'assets/ammo_text/noAmmo.png')
         this.load.image('ammo0', 'assets/ammo_text/ZERO.png')
@@ -35,6 +39,7 @@ class GameScene extends Phaser.Scene
         this.load.image('ammo4', 'assets/ammo_text/FOUR.png')
         this.load.image('ammo5', 'assets/ammo_text/FIVE.png')
         this.load.image('ammo6', 'assets/ammo_text/SIX.png')
+        
         this.load.image('reloadText', 'assets/ammo_text/reloading.png')
         this.load.image('noAmmoText', 'assets/ammo_text/noAmmo.png')
         this.load.image('pausedText', 'assets/pause_screen_text/PAUSED.png')
@@ -44,6 +49,7 @@ class GameScene extends Phaser.Scene
         this.load.image('gameOverText', 'assets/gameover_screen_text/gameOverText.png')
         this.load.image('blackBlock', 'assets/gameover_screen_text/blackBlock.png')
         this.load.image('gameWonText', 'assets/gameover_screen_text/gameWon.png')
+        
         this.load.image('coin0', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_0.png')
         this.load.image('coin1', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_1.png')
         this.load.image('coin2', 'teamAssets/Tilemap/Coin/Spin/Pick Up_spin_2.png')
