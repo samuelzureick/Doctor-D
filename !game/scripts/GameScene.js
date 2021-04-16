@@ -27,6 +27,7 @@ class GameScene extends Phaser.Scene
         this.load.atlas('enemy', 'assets/sprites/blob.png', 'assets/sprites/blob.json')
         this.load.image('star', 'assets/star.png');
         this.load.image('ammoText', 'assets/ammo_text/AMMO.png')
+        this.load.image('clearedText', 'assets/ammo_text/noAmmo.png')
         this.load.image('ammo0', 'assets/ammo_text/ZERO.png')
         this.load.image('ammo1', 'assets/ammo_text/ONE.png')
         this.load.image('ammo2', 'assets/ammo_text/TWO.png')
@@ -184,6 +185,10 @@ class GameScene extends Phaser.Scene
         this.blackBlock.setDepth(100);
         this.blackBlock.setVisible(false)
 
+        this.clearedText = this.add.sprite(472,153,'clearedText')
+        this.clearedText.setDisplaySize(472,153)
+        this.clearedText.setVisible(false)
+
         // Username Form //
         this.usernameForm = this.add.dom(this.cameras.main.worldView.x + this.cameras.main.width / 2, 125).createFromCache('nameform');
         this.usernameForm.setInteractive();
@@ -271,14 +276,8 @@ class GameScene extends Phaser.Scene
     }
     
     testForDoor(player, door) {
-        //get properties of world collision
-        // let data = door.properties
-        // console.log(data)
-        // if (!data.end) {
-        //     this.scene.restart('room' + (this.registry.list.load ^ 1))
-        // }
         if (this.roomCleared){
-            if (this.registry.list.load == '2') {
+            if (this.registry.list.load == '3') {
                 this.hasWon = true;
             } else {
                 this.scene.restart('room' + (this.registry.list.load))
@@ -568,6 +567,10 @@ class GameScene extends Phaser.Scene
             this.enemies.children.iterate((child) => {
                 child.update(this)
             })
+
+            this.clearedText.setVisible(false)
+        } else {
+            this.clearedText.setVisible(true)
         }
 
         // allows user to increment/decrement health with + and - (test if health function is working correctly - logged to console)
