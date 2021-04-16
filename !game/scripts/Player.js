@@ -10,7 +10,7 @@ class Player extends Entity {
         this.health = 5;
         this.maxHealth = 5;
         this.facing = 'right'
-        this.score = 0;
+        this.score = this.scene.registry.list.score;
         this.coinsCollected = 0;
         this.enemiesEliminated = 0;
         this.body.setSize(10, 10, false).setOffset(15, 20);
@@ -130,7 +130,8 @@ class Player extends Entity {
 
     // updates the player's score
     updateScore(amount) {
-        this.score += amount;
+        this.scene.registry.list.score += amount
+        this.score = this.scene.registry.list.score;
     }
 
     // called when the player's health is updated.
@@ -139,7 +140,7 @@ class Player extends Entity {
         
         if (this.health > this.maxHealth) {
             this.health = this.maxHealth;
-            this.score += 10;
+            this.updateScore(10);
         }
         
         if (this.health <= 0) {
