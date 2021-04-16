@@ -501,7 +501,7 @@ class GameScene extends Phaser.Scene
     
     mainMenu() {
         var inputUsername = this.usernameForm.getChildByID('name'); 
-        console.log(inputUsername.value);
+        
         window.location.href = "../!website/Menu.html";
         console.log("return to main menu")
     }
